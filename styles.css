@@ -149,7 +149,7 @@ a { color: inherit; }
 .p-iright { order: 1; padding-bottom: 36px; }
 .p-iright .m-visual { margin-bottom: 20px; }
 .duo { order: 2; position: relative; height: 300vh; height: 300svh; }
-.contact-m { order: 3; padding: 40px 22px 120px; text-align: center; }
+.contact-m { order: 3; padding: 40px 22px 28px; text-align: center; }
 /* single words must always fit: HUMBLE is ~5.5em wide, INTEGRACJA ~8.2em */
 .t-hero { font-size: min(calc(44 * var(--uf)), calc((100vw - 48px) / 5.7)); }
 .p-omid .t-h1 { font-size: min(calc(27 * var(--uf)), calc((100vw - 48px) / 8.5)); }
@@ -172,7 +172,7 @@ a { color: inherit; }
 .contact-m .one-line { white-space: nowrap; font-size: min(calc(10 * var(--uf)), calc((100vw - 40px) / 22.5)); }
 .contact-m .one-line-en { white-space: nowrap; font-size: min(calc(7.5 * var(--uf)), calc((100vw - 40px) / 21)); }
 /* phones: the contact block replaces the footer contact line */
-@media (max-width: 1099px), (orientation: portrait) { .foot .d-flex { display: none; } .foot { padding-top: 8px; } }
+@media (max-width: 1099px), (orientation: portrait) { .foot .d-flex { display: none; } .foot { padding: 0 22px 76px; font-size: 11px; } }
 
 /* landscape phones: panel as two columns */
 @media (orientation: landscape) and (max-width: 1099px) {
@@ -246,3 +246,21 @@ a { color: inherit; }
   .mail.show { transform: translate(50%, 0); }
   .mail:hover { transform: translate(50%, -3px); }
 }
+
+/* ---------- loader: target spins, dashes ±20 px, blinks, spins again ---------- */
+html.loading, html.loading body { overflow: hidden; }
+.loader {
+  position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--bg);
+  transition: opacity .45s ease, visibility .45s;
+  animation: ld-safety .01s 20s forwards;           /* never block the page if scripts fail */
+}
+.loader.done { opacity: 0; visibility: hidden; }
+@keyframes ld-safety { to { opacity: 0; visibility: hidden; } }
+.loader svg { width: 96px; height: 96px; overflow: visible; }
+.ld-move { animation: ld-move 2.4s cubic-bezier(.5,0,.3,1) infinite; }
+.ld-rot { transform-box: fill-box; transform-origin: center; animation: ld-rot 2.4s cubic-bezier(.6,0,.3,1) infinite; }
+.ld-blink { animation: ld-blink 2.4s linear infinite; }
+@keyframes ld-rot { 0% { transform: rotate(0) } 22%, 100% { transform: rotate(360deg) } }
+@keyframes ld-move { 0%, 24% { transform: translate(0, 0) } 34% { transform: translate(24px, -16px) } 44% { transform: translate(-20px, 18px) } 54%, 100% { transform: translate(0, 0) } }
+@keyframes ld-blink { 0%, 58%, 100% { opacity: 1 } 61% { opacity: 0 } 64% { opacity: 1 } 67% { opacity: 0 } 70% { opacity: 1 } }
+@media (prefers-reduced-motion: reduce) { .loader * { animation: none !important; } }

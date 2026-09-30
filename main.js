@@ -92,6 +92,7 @@
     const scale = Math.max(r.width / vb.width, r.height / vb.height);
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const ext = (await avif) ? 'avif' : 'webp';
+    const waits = [];
     svg.querySelectorAll('image[data-img]').forEach(im => {
       const need = im.width.baseVal.value * scale * dpr;
       const ws = IMG[im.dataset.img];
@@ -99,9 +100,13 @@
       const url = `assets/img/${im.dataset.img}-${w}.${ext}`;
       const cur = im.getAttribute('href');
       const curW = cur ? +cur.match(/-(\d+)\./)[1] : 0;
-      if (w > curW) im.setAttribute('href', url);      // only ever upgrade
+      if (w > curW) {                                  // only ever upgrade
+        im.setAttribute('href', url);
+        const pre = new Image(); pre.src = url;
+        waits.push(pre.decode().catch(() => {}));
+      }
     });
-    return true;
+    return Promise.all(waits);
   };
 
   const arts = [...document.querySelectorAll('.art, .art-m')];
@@ -109,7 +114,7 @@
   const trigger = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('in'); trigger.unobserve(e.target); }
   }), { threshold: 0.3 });
-  arts.forEach(s => { loader.observe(s); trigger.observe(s); });
+  arts.forEach(s => loader.observe(s));
   let t;
   addEventListener('resize', () => { clearTimeout(t); fitBoxes(); t = setTimeout(() => arts.forEach(s => {
     const r = s.getBoundingClientRect();
@@ -185,7 +190,17 @@
   relayout();
   if (document.fonts) document.fonts.ready.then(() => { lastW = 0; relayout(); });
 
-  // 5) floating email appears once the visitor starts scrolling
+  // 5) loader: unlock when fonts + every image of the current layout are ready (max 12 s)
+  const unlock = () => {
+    const el = document.querySelector('.loader');
+    document.documentElement.classList.remove('loading');
+    if (el) { el.classList.add('done'); setTimeout(() => el.remove(), 600); }
+    arts.forEach(s => trigger.observe(s));
+  };
+  const ready = [document.fonts ? document.fonts.ready : Promise.resolve(), ...arts.map(s => loadImages(s))];
+  Promise.race([Promise.all(ready), new Promise(r => setTimeout(r, 12000))]).then(unlock);
+
+  // 6) floating email appears once the visitor starts scrolling
   const mail = document.querySelector('.mail');
   const onScroll = () => mail.classList.toggle('show', scrollY > innerHeight * 0.35);
   addEventListener('scroll', onScroll, { passive: true });

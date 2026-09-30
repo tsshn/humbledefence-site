@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pl">
+<html lang="pl" class="loading">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -18,8 +18,15 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;800&family=Manrope:wght@600;800&family=Unbounded:wght@700;900&display=swap">
 <link rel="stylesheet" href="styles.css">
 <script src="main.js" defer></script>
+<noscript><style>.loader{display:none}html.loading,html.loading body{overflow:auto}</style></noscript>
 </head>
 <body>
+<div class="loader" aria-hidden="true">
+  <svg viewBox="-60 -60 120 120"><g class="ld-move"><g class="ld-rot"><g class="ld-blink">
+    <circle r="44" class="ring"/><circle r="16" class="ring dash"/><circle r="1.8" class="dot"/>
+    <path class="tick" d="M0 -56V-34M0 34V56M-56 0H-34M34 0H56"/>
+  </g></g></g></svg>
+</div>
 <main>
 
 <!-- ================= OUTSIDE SPREAD ================= -->
