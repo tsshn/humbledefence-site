@@ -251,12 +251,15 @@ a { color: inherit; }
 html.loading, html.loading body { overflow: hidden; }
 .loader {
   position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--bg);
-  transition: opacity .45s ease, visibility .45s;
+  transition: opacity .45s ease, visibility .45s, background-color .8s ease;
   animation: ld-safety .01s 20s forwards;           /* never block the page if scripts fail */
 }
 .loader.done { opacity: 0; visibility: hidden; }
 @keyframes ld-safety { to { opacity: 0; visibility: hidden; } }
-.loader svg { width: 96px; height: 96px; overflow: visible; }
+.loader svg { width: 96px; height: 96px; overflow: visible; transition: transform .9s cubic-bezier(.65,0,.25,1); }
+.loader.stop * { animation: none !important; }
+.loader.fly { background-color: transparent; pointer-events: none; }
+html.handoff .drift { visibility: hidden; }
 .ld-move { animation: ld-move 2.4s cubic-bezier(.5,0,.3,1) infinite; }
 .ld-rot { transform-box: fill-box; transform-origin: center; animation: ld-rot 2.4s cubic-bezier(.6,0,.3,1) infinite; }
 .ld-blink { animation: ld-blink 2.4s linear infinite; }

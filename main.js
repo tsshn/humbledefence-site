@@ -122,10 +122,14 @@
   }), 200); });
 
   // 3) cover target drifts ±20 units around the drone (smooth, never repeats exactly)
+  let driftFrozen = false;
   if (!REDUCED) {
     const drifts = [...document.querySelectorAll('.drift')];
+    let last = null, clock = 0;
     const tick = now => {
-      const s = now / 1000;
+      if (last !== null && !driftFrozen) clock += (now - last) / 1000;
+      last = now;
+      const s = clock;
       drifts.forEach((g, i) => {
         const x = 20 * (0.62 * Math.sin(s * 0.41 + i) + 0.38 * Math.sin(s * 0.97 + 2.1 * i));
         const y = 20 * (0.62 * Math.sin(s * 0.33 + 1.3 + i) + 0.38 * Math.sin(s * 0.79 + 3.7 * i));
@@ -190,15 +194,44 @@
   relayout();
   if (document.fonts) document.fonts.ready.then(() => { lastW = 0; relayout(); });
 
-  // 5) loader: unlock when fonts + every image of the current layout are ready (max 12 s)
-  const unlock = () => {
-    const el = document.querySelector('.loader');
-    document.documentElement.classList.remove('loading');
-    if (el) { el.classList.add('done'); setTimeout(() => el.remove(), 600); }
+  // 5) loader: at least one full cycle, never cut a cycle short, then fly onto the drone
+  const loaderEl = document.querySelector('.loader');
+  const cycleEl = loaderEl && loaderEl.querySelector('.ld-blink');
+  let assetsReady = false, cycles = 0, handing = false;
+  const finish = () => {
+    document.documentElement.classList.remove('loading', 'handoff');
+    if (loaderEl) loaderEl.remove();
+    driftFrozen = false;
     arts.forEach(s => trigger.observe(s));
   };
+  const handoff = () => {
+    if (handing) return;
+    handing = true;
+    if (!loaderEl) return finish();
+    loaderEl.classList.add('stop');                     // cycle just ended: every transform is back at rest
+    document.documentElement.classList.remove('loading');
+    const dest = [...document.querySelectorAll('.drift')].map(g => g.getBoundingClientRect())
+      .find(r => r.width > 0 && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth);
+    if (!dest || REDUCED) { loaderEl.classList.add('done'); setTimeout(finish, 500); return; }
+    driftFrozen = true;                                  // hold the page target still while we land on it
+    const svg = loaderEl.querySelector('svg');
+    const r = svg.getBoundingClientRect();
+    const s = dest.width / (r.width * 112 / 120);        // ticks span 112 of the loader's 120 units
+    const dx = dest.left + dest.width / 2 - (r.left + r.width / 2);
+    const dy = dest.top + dest.height / 2 - (r.top + r.height / 2);
+    document.documentElement.classList.add('handoff');
+    loaderEl.classList.add('fly');
+    requestAnimationFrame(() => { svg.style.transform = `translate(${dx}px, ${dy}px) scale(${s})`; });
+    setTimeout(finish, 950);
+  };
+  const tryHandoff = () => { if (assetsReady && (cycles >= 1 || REDUCED)) handoff(); };
+  if (cycleEl) cycleEl.addEventListener('animationiteration', () => { cycles++; tryHandoff(); });
   const ready = [document.fonts ? document.fonts.ready : Promise.resolve(), ...arts.map(s => loadImages(s))];
-  Promise.race([Promise.all(ready), new Promise(r => setTimeout(r, 12000))]).then(unlock);
+  Promise.race([Promise.all(ready), new Promise(r => setTimeout(r, 12000))]).then(() => {
+    assetsReady = true;
+    tryHandoff();
+    setTimeout(() => { cycles = Math.max(cycles, 1); tryHandoff(); }, 3000);   // if the tab throttled animations
+  });
 
   // 6) floating email appears once the visitor starts scrolling
   const mail = document.querySelector('.mail');
