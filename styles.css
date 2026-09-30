@@ -168,6 +168,11 @@ a { color: inherit; }
 .duo-cam > svg { position: absolute; left: 0; top: 0; overflow: visible; will-change: transform; }
 .big-mail { display: inline-block; font: 800 clamp(20px, 6.2vw, 30px) var(--f-text); color: var(--red); text-decoration: none; margin-bottom: 10px; }
 .contact-m .t-cap { margin-top: 6px; }
+/* reply lines always on one line: ~22em and ~21em wide */
+.contact-m .one-line { white-space: nowrap; font-size: min(calc(10 * var(--uf)), calc((100vw - 40px) / 22.5)); }
+.contact-m .one-line-en { white-space: nowrap; font-size: min(calc(7.5 * var(--uf)), calc((100vw - 40px) / 21)); }
+/* phones: the contact block replaces the footer contact line */
+@media (max-width: 1099px), (orientation: portrait) { .foot .d-flex { display: none; } .foot { padding-top: 8px; } }
 
 /* landscape phones: panel as two columns */
 @media (orientation: landscape) and (max-width: 1099px) {
