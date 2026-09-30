@@ -110,10 +110,14 @@ a { color: inherit; }
 @keyframes bob { 0%, 100% { transform: translate(0, 0) } 25% { transform: translate(5px, -7px) } 50% { transform: translate(-4px, -2px) } 75% { transform: translate(3px, 6px) } }
 /* phone pinned scene: drone flies in from the right; net position is driven by scroll (main.js) */
 .duo-mode .drone-rise { transform: translateX(340px); }
-.duo-mode .net-in { animation: none !important; transform: translateX(-520px); opacity: 0; }
+.duo-mode .net-in { animation: none !important; transform: none; opacity: 1; }
+.duo-mode .bob { animation: none; }
+/* idle bob on the whole drone layer: a composited transform, no SVG repaint */
+.duo-drone { animation: bobpx 6s ease-in-out infinite; }
+@keyframes bobpx { 0%, 100% { translate: 0 0 } 25% { translate: 5px -6px } 50% { translate: -4px -2px } 75% { translate: 3px 5px } }
 
 @media (prefers-reduced-motion: reduce) {
-  .art *, .art-m * { animation: none !important; transition: none !important; }
+  .art *, .art-m *, .duo-drone { animation: none !important; transition: none !important; }
   .drone-rise, .tgt-in, .net-in, .pop { opacity: 1 !important; transform: none !important; }
   .draw { stroke-dashoffset: 0; }
 }
@@ -157,10 +161,11 @@ a { color: inherit; }
 .duo-text { position: relative; flex: none; height: var(--th, 60svh); --uf: 1.45px; }
 @media (max-height: 720px) { .duo-text { --uf: 1.3px; --u: 1px; } }
 @media (min-width: 600px) { .duo-text { --uf: 1.75px; } }
-.duo-text .panel { position: absolute; top: 0; left: 0; right: 0; padding-top: calc(28px + env(safe-area-inset-top)); will-change: transform, opacity; }
+.duo-text .panel { position: absolute; top: 0; left: 0; right: 0; padding-top: calc(28px + env(safe-area-inset-top)); will-change: transform, opacity; backface-visibility: hidden; }
 .duo-text .p-ileft { opacity: 0; transform: translateX(-105%); }
-.duo-scene { position: relative; flex: 1; min-height: 160px; }
-.duo-scene > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.duo-scene { position: relative; flex: 1; min-height: 160px; overflow: hidden; }
+.duo-cam { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+.duo-cam > svg { position: absolute; left: 0; top: 0; overflow: visible; will-change: transform; }
 .big-mail { display: inline-block; font: 800 clamp(20px, 6.2vw, 30px) var(--f-text); color: var(--red); text-decoration: none; margin-bottom: 10px; }
 .contact-m .t-cap { margin-top: 6px; }
 
@@ -202,15 +207,15 @@ a { color: inherit; }
 }
 
 /* ---------- demo video ---------- */
-.demo { position: relative; background: var(--bg); padding: 36px 16px 56px; }
+.demo { position: relative; background: var(--bg); padding: 16px 12px 28px; }
 @media (min-width: 1100px) and (orientation: landscape) { .demo { padding: 10vh 22px; } }
 .demo-in { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; text-align: center; }
 @media (max-width: 1099px), (orientation: portrait) { .demo > .m-swoosh { display: none; } }
 .demo .tag { font-size: 12px; --u: 1.3px; }
-.demo .t-h1 { font-size: clamp(26px, 4.2vw, 52px); margin-top: 14px; }
+.demo .t-h1 { font-size: clamp(24px, 4.2vw, 52px); margin-top: 10px; }
 .demo .t-cap { font-size: 13px; margin-top: 6px; }
 .player {
-  margin: 24px auto 0; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; overflow: hidden;
+  margin: 16px auto 0; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; overflow: hidden;
   width: min(100%, calc((100svh - 240px) * 16 / 9)); min-width: min(100%, 320px);
   box-shadow: 0 24px 60px rgba(13, 27, 42, .22);
 }
