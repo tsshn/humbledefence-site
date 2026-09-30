@@ -160,11 +160,17 @@
   };
   const ease = x => x < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x);
   const lerp = (a, c, t) => a + (c - a) * t;
-  let lastT = -1;
+  let lastT = -1, duoIn = false;
+  const duoHead = imid.querySelector('h2');
   const onDuo = () => {
     if (DESK.matches) {
       if (lastT !== -1) { [imid, ileft].forEach(p => { p.style.transform = ''; p.style.opacity = ''; }); lastT = -1; }
       return;
+    }
+    if (!duoIn && !document.documentElement.classList.contains('loading') &&
+        duoHead.getBoundingClientRect().top < innerHeight * 0.5) {
+      duoIn = true;
+      netSvg.classList.add('in'); droneSvg.classList.add('in');
     }
     const r = duo.getBoundingClientRect();
     const p = -r.top / Math.max(1, r.height - innerHeight);
@@ -202,7 +208,8 @@
     document.documentElement.classList.remove('loading', 'handoff');
     if (loaderEl) loaderEl.remove();
     driftFrozen = false;
-    arts.forEach(s => trigger.observe(s));
+    lastT = -2; onDuo();
+    arts.filter(s => s !== netSvg && s !== droneSvg).forEach(s => trigger.observe(s));
   };
   const handoff = () => {
     if (handing) return;
