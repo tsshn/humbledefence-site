@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HUMBLE — Wykrywanie BSP krótkiego zasięgu · Short-range UAS detection</title>
+<meta name="description" content="HUMBLE buduje autonomiczną warstwę sensoryczną aktywnego pancerza przeciw dronom kamikadze. Humble builds the autonomous sensing layer for active armor against kamikaze drones.">
+<meta name="theme-color" content="#EBEBEB">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://humbledefence.com/">
+<meta property="og:title" content="HUMBLE — Short-range UAS detection">
+<meta property="og:description" content="Autonomous sensing layer for active armor against kamikaze drones.">
+<meta property="og:image" content="https://humbledefence.com/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230D1B2A'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23E0262F' stroke-width='2'/%3E%3Cpath d='M16 2v7M16 23v7M2 16h7M23 16h7' stroke='%23E0262F' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23E0262F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;800&family=Manrope:wght@600;800&family=Unbounded:wght@700;900&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="main.js" defer></script>
+</head>
+<body>
+<main>
+
+<!-- ================= OUTSIDE SPREAD ================= -->
+<section class="spread" id="outside" aria-label="HUMBLE">
+  <div class="stage">
+    <svg class="bg-swoosh" viewBox="0 0 841.9 595.3" aria-hidden="true">
+      <path d="M-600 607 L-8.5 265 C190 150 470 10 850.4 -8.5 L1450 -37.7 L1450 49 L850.4 70 C560 80 280 200 -8.5 350 L-600 657.6 Z" fill="#2A4674" opacity=".1"/>
+      <path d="M-600 683 L-8.5 372 C290 215 570 95 850.4 84 L1450 60.5" fill="none" stroke="#2A4674" stroke-width="1.2" opacity=".3"/>
+    </svg>
+    <svg class="art" id="art-outside" viewBox="0 0 841.9 595.3" aria-hidden="true">
+      <image data-img="scene" x="0" y="121" width="842" height="474.3" preserveAspectRatio="none"/>
+      <g class="leaders">
+        <text class="s-cap" x="292" y="172.5">z dowolną</text>
+        <text class="s-cap" x="292" y="188.6">platformą</text>
+        <text class="s-en" x="292" y="203.2">ON ANY PLATFORM</text>
+        <text class="s-cap" x="410" y="172.5">z dowolnym</text>
+        <text class="s-cap" x="410" y="188.6">efektorem</text>
+        <text class="s-en" x="410" y="203.2">WITH ANY EFFECTOR</text>
+        <line class="draw" style="--len:63" x1="339.5" y1="213" x2="339.5" y2="276"/>
+        <line class="draw d2" style="--len:80" x1="415.5" y1="213" x2="415.5" y2="293"/>
+        <g class="pop"><g class="blink-slow"><circle cx="340" cy="281" r="5" class="ring"/><circle cx="340" cy="281" r="1.5" class="dot"/></g></g>
+        <g class="pop d2"><g class="blink-slow"><circle cx="416" cy="298" r="5" class="ring"/><circle cx="416" cy="298" r="1.5" class="dot"/></g></g>
+      </g>
+      <g class="drift"><g class="blink">
+        <circle cx="651" cy="228" r="44" class="ring"/>
+        <circle cx="651" cy="228" r="16" class="ring dash"/>
+        <circle cx="651" cy="228" r="1.8" class="dot"/>
+        <path class="tick" d="M651 172V194M651 262V284M595 228H617M685 228H707"/>
+      </g></g>
+    </svg>
+
+    <!-- outside left: statements (on phones shown under Integracja) -->
+    <div class="panel p-oleft">
+      <div class="blk stmts" style="--x:14.2;--y:62;--w:215">
+        <div class="stmt">
+          <span class="t-idx" style="--fs:8">01</span>
+          <div><p class="t-lead" style="--fs:13">Wykrywa drony <em>światłowodowe</em> i sterowane radiowo</p>
+          <p class="t-cap" lang="en" style="--fs:6.5">Detects <em>fiber-optic</em> and radio-controlled drones</p></div>
+        </div>
+        <div class="stmt">
+          <span class="t-idx" style="--fs:8">02</span>
+          <div><p class="t-lead" style="--fs:13">Widzi w całkowitej ciemności</p>
+          <p class="t-cap" lang="en" style="--fs:6.5">Sees in complete darkness</p></div>
+        </div>
+        <div class="stmt">
+          <span class="t-idx" style="--fs:8">03</span>
+          <div><p class="t-lead" style="--fs:13">Działa w trudnych warunkach pogodowych</p>
+          <p class="t-cap" lang="en" style="--fs:6.5">Works in harsh weather conditions</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- outside middle: integration -->
+    <div class="panel p-omid" data-swoosh>
+      <div class="blk" style="--x:292;--y:62;--w:250">
+        <span class="tag" style="--fs:7">Aktywny pancerz · <span lang="en">Active armor</span></span>
+        <h2 class="t-h1 nw" style="--fs:27;margin-top:calc(12*var(--u))">INTEGRACJA</h2>
+        <p class="t-cap" lang="en" style="--fs:8.5;margin-top:calc(4*var(--u))">Integrate</p>
+        <p class="sr-only">z dowolną platformą (on any platform), z dowolnym efektorem (with any effector)</p>
+      </div>
+      <div class="m-visual" data-art="art-outside" data-view="277.8 150 280.6 345" data-fit="418.1,150,345,0,560"></div>
+    </div>
+
+    <!-- outside right: cover -->
+    <div class="panel p-ocover" data-swoosh>
+      <div class="blk" style="--x:572.6;--y:14;--w:256">
+        <h1 class="t-hero nw" style="--fs:44">HUMBLE</h1>
+        <span class="rule"></span>
+        <p class="t-lead" style="--fs:17;--lh:1.18;width:calc(165*var(--u))">Wykrywanie BSP krótkiego zasięgu</p>
+        <p class="t-cap" lang="en" style="--fs:8.5;margin-top:calc(4*var(--u))">Short-range UAS detection</p>
+      </div>
+      <div class="m-visual" data-art="art-outside" data-view="558.4 140 283.5 455.3" data-fit="697,140,455.3,540,841.9,pad" data-hide=".leaders"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEMO VIDEO ================= -->
+<section class="demo" id="demo" aria-label="Demo" data-swoosh="all">
+  <div class="demo-in">
+    <span class="tag">Demo</span>
+    <h2 class="t-h1">Zobacz, jak to działa</h2>
+    <p class="t-cap" lang="en">See it in action</p>
+    <div class="player">
+      <video controls playsinline preload="none" poster="assets/video/poster.webp">
+        <source src="assets/video/demo-720.mp4" type="video/mp4" media="(max-width: 900px)">
+        <source src="assets/video/demo-1080.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INSIDE SPREAD ================= -->
+<section class="spread" id="inside" aria-label="Kim jesteśmy">
+  <div class="stage">
+    <svg class="bg-swoosh" viewBox="0 0 841.9 595.3" aria-hidden="true">
+      <path d="M-600 421.8 L-8.5 309.5 C181.5 273.5 381.5 141.5 564.1 63.5 L1450 -315 L1450 -205 L564.1 143.5 C386.5 213.5 186.5 341.5 -8.5 401.5 L-600 583.5 Z" fill="#2A4674" opacity=".1"/>
+      <path d="M-600 462.6 L-8.5 297.8 C206.5 237.8 401.5 107.8 564.1 37.8 L1450 -345" fill="none" stroke="#2A4674" stroke-width="1.2" opacity=".3"/>
+    </svg>
+    <svg class="art" id="art-inside" viewBox="0 0 841.9 595.3" aria-hidden="true">
+      <defs>
+        <clipPath id="clip-bc"><rect x="564.1" y="-10" width="290" height="620"/></clipPath>
+        <linearGradient id="g-top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBEBEB" stop-opacity=".92"/><stop offset="1" stop-color="#EBEBEB" stop-opacity="0"/></linearGradient>
+        <linearGradient id="g-bot" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBEBEB" stop-opacity="0"/><stop offset="1" stop-color="#EBEBEB" stop-opacity=".92"/></linearGradient>
+        <linearGradient id="g-cone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E0262F" stop-opacity=".38"/><stop offset="1" stop-color="#E0262F" stop-opacity=".06"/></linearGradient>
+        <radialGradient id="g-sweep" gradientUnits="userSpaceOnUse" cx="702.5" cy="296.7" r="132"><stop offset="0" stop-color="#E0262F" stop-opacity=".5"/><stop offset="1" stop-color="#E0262F" stop-opacity="0"/></radialGradient>
+      </defs>
+      <!-- back cover: top-down photo + scan cone -->
+      <g clip-path="url(#clip-bc)" class="bc">
+        <image data-img="backcover" x="564.1" y="0" width="277.9" height="595.6" preserveAspectRatio="none"/>
+        <rect x="564.1" y="-8.5" width="286.3" height="300" fill="url(#g-top)"/>
+        <rect x="564.1" y="453.8" width="286.3" height="150" fill="url(#g-bot)"/>
+        <path d="M702.5 296.7 L816.82 362.7 A132 132 0 0 1 588.18 362.7 Z" fill="url(#g-cone)"/>
+        <path class="thin" d="M702.5 296.7 L816.82 362.7 M702.5 296.7 L588.18 362.7 M816.82 362.7 A132 132 0 0 1 588.18 362.7"/>
+        <path class="thin" stroke-dasharray="2 2" d="M730.21 312.7 A32 32 0 0 1 674.79 312.7"/>
+        <path class="thin steel" stroke-dasharray="4 4" opacity=".9" d="M845.39 379.2 A165 165 0 0 1 559.61 379.2"/>
+        <g class="sweep">
+          <path d="M702.5 296.7 L723.15 427.08 A132 132 0 0 1 681.85 427.08 Z" fill="url(#g-sweep)"/>
+          <line x1="702.5" y1="296.7" x2="702.5" y2="428.7" class="sweep-line"/>
+          <animateTransform attributeName="transform" type="rotate" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" values="-57 702.5 296.7;57 702.5 296.7;-57 702.5 296.7"/>
+        </g>
+        <circle cx="702.5" cy="296.7" r="5" class="ring"/><circle cx="702.5" cy="296.7" r="1.5" class="dot"/>
+        <g class="pill"><rect x="693.5" y="322.7" width="18" height="12" rx="2"/><text x="702.5" y="331">1 m</text></g>
+        <g class="pill"><rect x="691.5" y="396.3" width="22" height="12" rx="2"/><text x="702.5" y="404.6">120°</text></g>
+        <g class="pill"><rect x="691.5" y="422.7" width="22" height="12" rx="2"/><text x="702.5" y="431">20 m</text></g>
+        <g class="pill steel"><rect x="689.5" y="455.7" width="26" height="12" rx="2"/><text x="702.5" y="464">35+ m</text></g>
+      </g>
+      <!-- net, drone, target -->
+      <g class="net-in net"><image data-img="net" x="139" y="198.7" width="414.9" height="396.3" preserveAspectRatio="none"/></g>
+      <g class="drone-rise"><g class="bob"><image data-img="drone" x="330" y="370.7" width="194" height="160" preserveAspectRatio="none"/></g></g>
+      <g class="tgt-in"><g class="bob lag"><g class="blink late">
+        <circle cx="421" cy="444.7" r="44" class="ring"/>
+        <circle cx="421" cy="444.7" r="16" class="ring dash"/>
+        <circle cx="421" cy="444.7" r="1.8" class="dot"/>
+        <path class="tick" d="M421 388.7V410.7M421 478.7V500.7M365 444.7H387M455 444.7H477"/>
+      </g></g></g>
+    </svg>
+
+    <!-- phones: pinned scene, text swaps while the camera pulls back and the net flies in -->
+    <div class="duo"><div class="duo-sticky" data-swoosh><div class="duo-text">
+    <!-- inside middle: who we are -->
+    <div class="panel p-imid">
+      <div class="blk" style="--x:297.6;--y:16;--w:252">
+        <h2 class="t-h1 nw" style="--fs:20">KIM JESTEŚMY</h2>
+        <p class="t-en" lang="en" style="--fs:7.5;letter-spacing:.05em;margin-top:calc(4*var(--u))">Who we are</p>
+        <p class="t-pl" style="--fs:9.5;--lh:1.4;margin-top:calc(12*var(--u))"><b>Humble</b> buduje autonomiczną warstwę sensoryczną aktywnego pancerza przeciw dronom kamikadze.</p>
+        <p class="t-en" lang="en" style="--fs:7.5;--lh:1.4;margin-top:calc(4*var(--u))"><b>Humble</b> builds the autonomous sensing layer for active armor against kamikaze drones.</p>
+        <ul class="items" style="margin-top:calc(12*var(--u))">
+          <li><p class="t-pl" style="--fs:9"><b>Różne platformy</b> — pojazdy nieopancerzone i opancerzone oraz pozycje naziemne.</p>
+              <p class="t-en" lang="en" style="--fs:7"><b>Various platforms</b> — soft-skinned and armored vehicles, ground positions.</p></li>
+          <li><p class="t-pl" style="--fs:9"><b>Wielowarstwowa detekcja</b> — optyczny pomiar odległości z akustycznym potwierdzeniem.</p>
+              <p class="t-en" lang="en" style="--fs:7"><b>Multi-layer sensing</b> — optical ranging with acoustic confirmation.</p></li>
+          <li><p class="t-pl" style="--fs:9"><b>Działający prototyp sprzętowy</b> — z potwierdzonymi parametrami <span class="d-only">(obok)</span><span class="m-only">(powyżej)</span>.</p>
+              <p class="t-en" lang="en" style="--fs:7"><b>Working hardware prototype</b> — with confirmed characteristics <span class="d-only">(see next panel)</span><span class="m-only">(see above)</span>.</p></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- inside left: who we look for -->
+    <div class="panel p-ileft">
+      <div class="blk" style="--x:14.2;--y:16;--w:250">
+        <h2 class="t-h1 nw" style="--fs:20">KOGO SZUKAMY</h2>
+        <p class="t-en" lang="en" style="--fs:7.5;margin-top:calc(4*var(--u))">Who we are looking for</p>
+        <ul class="items" style="margin-top:calc(12*var(--u))">
+          <li><p class="t-pl" style="--fs:9"><b>Inwestorów</b> — którzy chcą wesprzeć obiecujący polski projekt obronny.</p>
+              <p class="t-en" lang="en" style="--fs:7"><b>Investors</b> — looking to back a promising Poland-based defence project.</p></li>
+          <li><p class="t-pl" style="--fs:9"><b>Partnerów</b> — producentów efektorów, którzy chcą uczynić je autonomicznymi.</p>
+              <p class="t-en" lang="en" style="--fs:7"><b>Partners</b> — effector developers who want to make their systems autonomous.</p></li>
+          <li><p class="t-pl" style="--fs:9"><b>Klientów</b> — którzy muszą chronić pojazdy i żołnierzy przed dronami FPV i amunicją krążącą.</p>
+              <p class="t-en" lang="en" style="--fs:7"><b>Clients</b> — who need to protect vehicles and troops from FPV drones and loitering munitions.</p></li>
+          <li class="civil"><p class="t-pl" style="--fs:9"><b>Zastosowania cywilne</b> — monitoring obiektów o wysokim poziomie bezpieczeństwa, natychmiastowe alerty i ultraprecyzyjne pozycjonowanie.</p>
+              <p class="t-en" lang="en" style="--fs:7"><b>Civil applications</b> — high-security site monitoring, instant alerts and ultra-precise positioning.</p></li>
+        </ul>
+      </div>
+    </div>
+
+    </div>
+      <div class="duo-scene" data-art="art-inside"></div>
+    </div></div>
+
+    <!-- phones: contact right after the scene -->
+    <div class="contact-m" data-swoosh>
+      <a class="big-mail" href="mailto:hq@humbledefence.com">hq@humbledefence.com</a>
+      <p class="t-pl" style="--fs:10">Odpowiadamy w ciągu 24 godzin lub szybciej</p>
+      <p class="t-cap" lang="en" style="--fs:7.5">We answer in 24 hours or less</p>
+    </div>
+
+    <!-- inside right: prototype specs -->
+    <div class="panel p-iright" data-swoosh>
+      <div class="blk" style="--x:578.3;--y:16;--w:250">
+        <span class="tag" style="--fs:7">Prototyp · <span lang="en">Prototype</span></span>
+        <h2 class="t-h2 nw" style="--fs:15;margin-top:calc(4*var(--u))">Parametry prototypu</h2>
+        <p class="t-cap" lang="en" style="--fs:7.5;margin-top:calc(4*var(--u))">Prototype specifications</p>
+        <div class="specs" style="margin-top:calc(14*var(--u))">
+          <div><b class="t-big nw" style="--fs:19">1–20 m</b><p class="t-spec" style="--fs:9.5">Zasięg wykrywania</p><p class="t-cap" lang="en" style="--fs:6.5">Detection range</p>
+            <p class="t-note" style="--fs:6">35+ m — w fazie rozwoju<br><span lang="en">35+ m — in development</span></p></div>
+          <div><b class="t-big nw" style="--fs:19">&lt; 1 s</b><p class="t-spec" style="--fs:9.5">Czas wykrycia</p><p class="t-cap" lang="en" style="--fs:6.5">Time to detect</p></div>
+          <div><b class="t-big nw" style="--fs:19">120° × 90°</b><p class="t-spec" style="--fs:9.5">Pole widzenia</p><p class="t-cap" lang="en" style="--fs:6.5">Field of view</p>
+            <p class="t-note" style="--fs:6">Łatwa rozbudowa do kopuły 360°×90°<br><span lang="en">Easy extension to 360°×90° dome</span></p></div>
+          <div><b class="t-big nw" style="--fs:19">&lt; 10 cm</b><p class="t-spec" style="--fs:9.5">Dokładność detekcji</p><p class="t-cap" lang="en" style="--fs:6.5">Detection accuracy</p></div>
+        </div>
+      </div>
+      <div class="m-visual" data-art="art-inside" data-view="564.1 250 277.8 230" data-fit="703,250,230,564.1,841.9"></div>
+      <div class="blk" style="--x:578.3;--y:487.1;--w:250">
+        <ul class="items tight">
+          <li><p class="t-spec" style="--fs:9.5;--lh:1.15">Dokładność centymetrowa</p><p class="t-cap" lang="en" style="--fs:6.5">Centimeter-level accuracy</p></li>
+          <li><p class="t-spec" style="--fs:9.5;--lh:1.15">Ciągłe śledzenie</p><p class="t-cap" lang="en" style="--fs:6.5">Continuous tracking</p></li>
+          <li><p class="t-spec" style="--fs:9.5;--lh:1.15">Radiowo neutralna detekcja — niewidoczna dla przeciwnika</p><p class="t-cap" lang="en" style="--fs:6.5">Radio-neutral detection — invisible to adversary</p></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <a href="mailto:hq@humbledefence.com">hq@humbledefence.com</a>
+  <span>Odpowiadamy w ciągu 24 godzin · <span lang="en">We answer within 24 hours</span></span>
+  <span>© 2026 Humble</span>
+</footer>
+</main>
+
+<a class="mail" href="mailto:hq@humbledefence.com" aria-label="Email hq@humbledefence.com">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3z M3 7l9 6 9-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+  <span>hq@humbledefence.com</span>
+</a>
+</body>
+</html>
