@@ -108,16 +108,21 @@ a { color: inherit; }
 .bob { animation: bob 6s ease-in-out infinite; }
 .bob.lag { animation-delay: .35s; }
 @keyframes bob { 0%, 100% { transform: translate(0, 0) } 25% { transform: translate(5px, -7px) } 50% { transform: translate(-4px, -2px) } 75% { transform: translate(3px, 6px) } }
-/* phone pinned scene: drone flies in from the right; net position is driven by scroll (main.js) */
-.duo-mode .drone-rise { transform: translateX(340px); }
-.duo-mode .net-in { animation: none !important; transform: none; opacity: 1; }
-.duo-mode .bob { animation: none; }
-/* idle bob on the whole drone layer: a composited transform, no SVG repaint */
-.duo-drone { animation: bobpx 6s ease-in-out infinite; }
+/* phone pinned scene (HTML layers): drone flies in from the right, target locks, bob; net driven by scroll */
+.duo-cam > * { position: absolute; }
+.duo-net { opacity: 0; will-change: transform, opacity; }
+.duo-drone { opacity: 0; transform: translate3d(120vw, 0, 0); transition: transform 1.4s cubic-bezier(.16,.84,.3,1), opacity .5s; will-change: transform; }
+.duo-drone > img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.duo-in .duo-drone { opacity: 1; transform: none; animation: bobpx 6s ease-in-out 1.6s infinite; }
+.duo-tgt { position: absolute; overflow: visible; opacity: 0; transform-origin: center; }
+.duo-in .duo-tgt { animation: lock 1.2s 1.5s forwards; }
+.duo-blink { animation: blink2 5s 4.5s infinite; }
 @keyframes bobpx { 0%, 100% { translate: 0 0 } 25% { translate: 5px -6px } 50% { translate: -4px -2px } 75% { translate: 3px 5px } }
+.off, .off * { animation-play-state: paused !important; }
 
 @media (prefers-reduced-motion: reduce) {
-  .art *, .art-m *, .duo-drone { animation: none !important; transition: none !important; }
+  .art *, .art-m *, .duo-drone, .duo-tgt, .duo-blink { animation: none !important; transition: none !important; }
+  .duo-drone, .duo-tgt { opacity: 1 !important; transform: none !important; }
   .drone-rise, .tgt-in, .net-in, .pop { opacity: 1 !important; transform: none !important; }
   .draw { stroke-dashoffset: 0; }
 }
@@ -165,7 +170,6 @@ a { color: inherit; }
 .duo-text .p-ileft { opacity: 0; transform: translateX(-105%); }
 .duo-scene { position: relative; flex: 1; min-height: 160px; overflow: hidden; }
 .duo-cam { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
-.duo-cam > svg { position: absolute; left: 0; top: 0; overflow: visible; will-change: transform; }
 .big-mail { display: inline-block; font: 800 clamp(20px, 6.2vw, 30px) var(--f-text); color: var(--red); text-decoration: none; margin-bottom: 10px; }
 .contact-m .t-cap { margin-top: 6px; }
 /* reply lines always on one line: ~22em and ~21em wide */
