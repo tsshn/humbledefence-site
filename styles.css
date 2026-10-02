@@ -271,3 +271,9 @@ html.handoff .drift { visibility: hidden; }
 @keyframes ld-move { 0%, 24% { transform: translate(0, 0) } 34% { transform: translate(24px, -16px) } 44% { transform: translate(-20px, 18px) } 54%, 100% { transform: translate(0, 0) } }
 @keyframes ld-blink { 0%, 58%, 100% { opacity: 1 } 61% { opacity: 0 } 64% { opacity: 1 } 67% { opacity: 0 } 70% { opacity: 1 } }
 @media (prefers-reduced-motion: reduce) { .loader * { animation: none !important; } }
+
+/* privacy note in the footer */
+.privacy { flex-basis: 100%; text-align: center; font-size: 11px; color: var(--steel); }
+.privacy summary { cursor: pointer; list-style: none; text-decoration: underline; text-underline-offset: 2px; }
+.privacy summary::-webkit-details-marker { display: none; }
+.privacy p { max-width: 560px; margin: 10px auto 0; line-height: 1.5; text-align: left; }
