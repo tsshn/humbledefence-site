@@ -1,6 +1,6 @@
 // Anonymous visit reporting for humbledefence.com — no cookies, no identity, nothing stored about the visitor.
-// One report stream per tab: source (?r= tag / referring site), language, screen size, open + active time,
-// max scroll %, demo video seconds watched, email clicks. The server adds network / city / device.
+// One report stream per tab: source (?r= tag / referring site), open + active time, max scroll %,
+// demo video seconds watched, email clicks. The server adds approximate location (city / country) only.
 (() => {
   const END = 'https://humble-visits.humbledefence.workers.dev/hit';
   // owner opt-out: open humbledefence.com/?me once on your own devices
@@ -16,7 +16,7 @@
   const st = {
     v: (crypto.randomUUID ? crypto.randomUUID().replace(/-/g, '') : Math.random().toString(36).slice(2) + Date.now().toString(36)).slice(0, 16),
     r: (q.get('r') || q.get('utm_source') || '').slice(0, 40),
-    ref, lang: navigator.language || '', scr: `${screen.width}×${screen.height}`,
+    ref,
     act: 0, sc: 0, vw: 0, mail: false,
   };
 
