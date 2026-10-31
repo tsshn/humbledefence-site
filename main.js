@@ -67,6 +67,7 @@
     '<path d="M0 74 C35 71 68 63 100 56" fill="none" stroke="#2A4674" stroke-width="1.2" vector-effect="non-scaling-stroke" opacity=".3"/></svg>';
   document.querySelectorAll('[data-swoosh]').forEach(el => {
     if (el.dataset.swoosh === 'both') el.insertAdjacentHTML('afterbegin', SW.replace('class="m-swoosh"', 'class="m-swoosh sw-wide"') + SW_TALL);
+    else if (el.dataset.swoosh === 'tall') el.insertAdjacentHTML('afterbegin', SW_TALL);   // long blocks: the gentle variant
     else el.insertAdjacentHTML('afterbegin', SW);
   });
 
