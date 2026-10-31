@@ -18,7 +18,9 @@
     r: (q.get('r') || q.get('utm_source') || '').slice(0, 40),
     ref,
     act: 0, sc: 0, vw: 0, mail: false,
+    lg: window.HD_LANG || 'pl',             // site version: pl / en-f / en
   };
+  addEventListener('hd:lang', e => { st.lg = e.detail; send('update'); });
 
   // active time: only while the tab is visible
   let since = document.visibilityState === 'visible' ? performance.now() : null;
@@ -55,7 +57,7 @@
 
   // sending: every 3 s if something changed, every 10 s regardless, and a final report when hidden/closed
   const snapshot = () => ({ ...st, open: Math.round((Date.now() - t0) / 1000), act: activeNow(), vw: Math.round(st.vw) });
-  const sig = s => `${s.sc}|${s.vw}|${s.mail}`;            // a "change" = scroll, video or email; time rides the 10 s beat
+  const sig = s => `${s.sc}|${s.vw}|${s.mail}|${s.lg}`;            // a "change" = scroll, video or email; time rides the 10 s beat
   let lastSig = '', lastSend = 0;
   const send = (ev, beacon) => {
     const s = snapshot();

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>HUMBLE</title>
+<script>
+  // GitHub Pages serves this for any unknown address. /en and /en-f are language versions of the one page:
+  // hand them to the page as ?lang=…, which puts the clean address back. Everything else goes home.
+  (function () {
+    var p = location.pathname.replace(/\/+$/, '');
+    var m = p === '/en' || p === '/en-f' ? 'en-f' : '';
+    var qs = location.search ? '&' + location.search.slice(1) : '';
+    location.replace(m ? '/?lang=' + m + qs + location.hash : '/');
+  })();
+</script>
+</head>
+<body style="background:#EBEBEB"></body>
+</html>

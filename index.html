@@ -16,9 +16,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;800&family=Manrope:wght@600;800&family=Unbounded:wght@700;900&display=swap">
-<link rel="stylesheet" href="styles.css">
-<script src="main.js" defer></script>
-<script src="track.js" defer></script>
+<link rel="stylesheet" href="styles.css?v=202611010010">
+<script src="lang.js?v=202611010010" defer></script>
+<script src="spin.js?v=202611010010" defer></script>
+<script src="main.js?v=202611010010" defer></script>
+<script src="track.js?v=202611010010" defer></script>
 <noscript><style>.loader{display:none}html.loading,html.loading body{overflow:auto}</style></noscript>
 </head>
 <body>
@@ -28,6 +30,9 @@
     <path class="tick" d="M0 -56V-34M0 34V56M-56 0H-34M34 0H56"/>
   </g></g></g></svg>
 </div>
+<nav class="lang" aria-label="Język · Language">
+  <a href="/" data-lang="pl" title="Polski, z angielskim">PL·EN</a><a href="/en-f" data-lang="en-f" title="English first, with Polish">EN·PL</a>
+</nav>
 <main>
 
 <!-- ================= OUTSIDE SPREAD ================= -->
@@ -40,12 +45,12 @@
     <svg class="art" id="art-outside" viewBox="0 0 841.9 595.3" aria-hidden="true">
       <image data-img="scene" x="0" y="121" width="842" height="474.3" preserveAspectRatio="none"/>
       <g class="leaders">
-        <text class="s-cap" x="292" y="172.5">z dowolną</text>
-        <text class="s-cap" x="292" y="188.6">platformą</text>
-        <text class="s-en" x="292" y="203.2">ON ANY PLATFORM</text>
-        <text class="s-cap" x="410" y="172.5">z dowolnym</text>
-        <text class="s-cap" x="410" y="188.6">efektorem</text>
-        <text class="s-en" x="410" y="203.2">WITH ANY EFFECTOR</text>
+        <text class="s-cap" x="292" y="172.5" data-en="on any">z dowolną</text>
+        <text class="s-cap" x="292" y="188.6" data-en="platform">platformą</text>
+        <text class="s-en sec" x="292" y="203.2" data-en="Z DOWOLNĄ PLATFORMĄ">ON ANY PLATFORM</text>
+        <text class="s-cap" x="410" y="172.5" data-en="with any">z dowolnym</text>
+        <text class="s-cap" x="410" y="188.6" data-en="effector">efektorem</text>
+        <text class="s-en sec" x="410" y="203.2" data-en="Z DOWOLNYM EFEKTOREM">WITH ANY EFFECTOR</text>
         <line class="draw" style="--len:63" x1="339.5" y1="213" x2="339.5" y2="276"/>
         <line class="draw d2" style="--len:80" x1="415.5" y1="213" x2="415.5" y2="293"/>
         <g class="pop"><g class="blink-slow"><circle cx="340" cy="281" r="5" class="ring"/><circle cx="340" cy="281" r="1.5" class="dot"/></g></g>
@@ -83,7 +88,7 @@
     <!-- outside middle: integration -->
     <div class="panel p-omid" data-swoosh>
       <div class="blk" style="--x:292;--y:62;--w:250">
-        <span class="tag" style="--fs:7">Aktywny pancerz · <span lang="en">Active armor</span></span>
+        <span class="tag" style="--fs:7"><span>Aktywny pancerz</span><span class="sep"> · </span><span lang="en">Active armor</span></span>
         <h2 class="t-h1 nw" style="--fs:27;margin-top:calc(12*var(--u))">INTEGRACJA</h2>
         <p class="t-cap" lang="en" style="--fs:8.5;margin-top:calc(4*var(--u))">Integrate</p>
         <p class="sr-only">z dowolną platformą (on any platform), z dowolnym efektorem (with any effector)</p>
@@ -104,23 +109,246 @@
   </div>
 </section>
 
+<!-- ================= THE PROBLEM: three answers, one gap ================= -->
+<section class="spread" id="problem" aria-label="Problem · The problem">
+  <div class="stage">
+    <div class="panel p-pr" data-swoosh>
+      <div class="pr-head">
+        <h2 class="t-h1 nw" style="--fs:20">PROBLEM</h2>
+        <p class="t-en t-upper" lang="en" style="--fs:7.5;letter-spacing:.05em;margin-top:calc(4*var(--u))">THE PROBLEM</p>
+      </div>
+      <div class="pr-lead">
+        <p class="t-lead" style="--fs:13;--lh:1.25">Drony to <em>szybkie, zwrotne cele</em> o <em>bardzo małej sygnaturze</em> — niezwykle trudno je wykryć, śledzić i zwalczyć. Latają tuż nad ziemią i przez las, przez co konwencjonalne warstwy <em>wczesnego wykrywania</em> stają się bezużyteczne.</p>
+        <p class="t-en" lang="en" style="--fs:7.5;--lh:1.45;margin-top:calc(4*var(--u))">Drones are <em>fast, manoeuvring targets</em> with a <em>very small footprint</em>, making them extremely hard to detect, track and engage. They fly close to the ground and through forests, rendering conventional <em>early detection</em> layers unusable.</p>
+      </div>
+
+      <!-- 01: the traditional layer -->
+      <article class="pr-act pr-a1">
+        <svg class="pr-ground" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 52 C300 44 650 30 1000 16 L1000 38 C650 52 300 66 0 76 Z" fill="#2A4674" opacity=".1"/>
+          <path d="M0 96 C350 82 700 62 1000 52" fill="none" stroke="#2A4674" stroke-width="1.2" vector-effect="non-scaling-stroke" opacity=".3"/>
+        </svg>
+        <div class="pr-fig pr-fig1" data-in>
+          <span class="pr-num pr-num1" aria-hidden="true">01</span>
+          <img src="assets/hpm/scene-3200.webp?v=202611010010" srcset="assets/hpm/scene-1800.webp?v=202611010010 1800w, assets/hpm/scene-3200.webp?v=202611010010 3200w" sizes="(min-width: 1100px) 80vw, 190vw" alt="Radar i system naziemny na przyczepach" width="3200" height="1871" decoding="async">
+        </div>
+        <div class="pr-txt">
+          <p class="pr-tag"><span>01 · Podejście tradycyjne</span><span lang="en">Traditional approach</span></p>
+          <h3 class="pr-title t-big" style="--fs:15">Wykryć z daleka</h3>
+          <p class="t-cap" lang="en" style="--fs:6.5">Detect from afar</p>
+          <ul class="misses">
+            <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Drogie we wdrożeniu na dużą skalę — często setki tysięcy dolarów</b></p><p class="t-cap" lang="en" style="--fs:6">Expensive to deploy at scale — often hundreds of thousands of dollars</p></li>
+            <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Często wymagają dedykowanej platformy — o ochronie lekkich, nieopancerzonych pojazdów można zapomnieć</b></p><p class="t-cap" lang="en" style="--fs:6">Often require a custom platform — forget about protecting light-skinned vehicles</p></li>
+            <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Dobre na duże cele z daleka — zawodzą przy małych, tanich zagrożeniach kilka metrów od nas</b></p><p class="t-cap" lang="en" style="--fs:6">Good for bigger targets at range — fail against small, cheap threats just metres away</p></li>
+            <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Systemy HPM (broń mikrofalowa dużej mocy) są za duże i zbyt energochłonne dla tanich pojazdów piechoty</b></p><p class="t-cap" lang="en" style="--fs:6">HPM (high-power microwave) systems are too large and power-hungry for cheap infantry vehicles</p></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 02 + 03: smarter effectors, jammers -->
+      <div class="pr-duo">
+        <article class="pr-act pr-a2">
+          <div class="pr-fig pr-fig2">
+            <span class="pr-num" aria-hidden="true">02</span>
+            <div class="loopvid pr-vid">
+              <img class="spin-poster" src="assets/problem/interceptor-loop.webp?v=202611010010" alt="Dron przechwytujący z pociskiem" width="588" height="896" decoding="async">
+              <canvas data-spin="assets/problem/interceptor-loop.mp4?v=202611010010" data-loop aria-hidden="true"></canvas>
+            </div>
+          </div>
+          <div class="pr-txt">
+            <p class="pr-tag"><span>02 · Inteligentne efektory kinetyczne</span><span lang="en">Smarter kinetic effectors</span></p>
+            <h3 class="pr-title t-big" style="--fs:15">Przechwycić sprytniej</h3>
+            <p class="t-cap" lang="en" style="--fs:6.5">Intercept smarter</p>
+            <ul class="misses">
+              <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Drogie w użyciu</b></p><p class="t-cap" lang="en" style="--fs:6">Expensive to use</p></li>
+              <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Nie przechwycą celu tak blisko</b></p><p class="t-cap" lang="en" style="--fs:6">Can’t intercept a target this close</p></li>
+              <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Wciąż potrzebują wstępnego wskazania celu, by go namierzyć</b></p><p class="t-cap" lang="en" style="--fs:6">Still need an initial cue to lock on</p></li>
+            </ul>
+          </div>
+        </article>
+        <article class="pr-act pr-a3">
+          <div class="pr-fig pr-fig3">
+            <span class="pr-num" aria-hidden="true">03</span>
+            <img class="pr-gun" src="assets/problem/shotgun.webp?v=202611010010" alt="Strzelba" width="1400" height="1289" decoding="async">
+            <img class="pr-jam" src="assets/problem/jammer.webp?v=202611010010" alt="Zagłuszarka" width="632" height="792" decoding="async">
+          </div>
+          <div class="pr-txt">
+            <p class="pr-tag"><span>03 · Realne rozwiązania</span><span lang="en">What’s actually fielded</span></p>
+            <h3 class="pr-title t-big" style="--fs:15">Zagłuszyć albo strzelać</h3>
+            <p class="t-cap" lang="en" style="--fs:6.5">Jam it or shoot it</p>
+            <ul class="misses">
+              <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Zagłuszanie jest bezsilne wobec dronów światłowodowych i autonomicznych</b></p><p class="t-cap" lang="en" style="--fs:6">Jamming is useless against fibre-optic and autonomous drones</p></li>
+              <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>A samą zagłuszarkę przeciwnik łatwo namierzy</b></p><p class="t-cap" lang="en" style="--fs:6">And the jammer itself is easy for the adversary to locate</p></li>
+            </ul>
+            <div class="pr-luck">
+              <p class="t-pl" style="--fs:10;--lh:1.25"><b>Dlatego wojska na całym świecie wciąż muszą polegać na <em>broni ręcznej</em>, <em>pancerzu</em> i&nbsp;<em>szczęściu</em>.</b></p>
+              <p class="t-cap" lang="en" style="--fs:6">That’s why militaries worldwide still rely on hand-held weapons, armour and luck</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- the gap: where each answer works, and where none does -->
+      <div class="pr-gap">
+        <p class="t-lead" style="--fs:13;--lh:1.25">Każde z nich zostawia <em>tę samą lukę</em>.</p>
+        <p class="t-en t-upper" lang="en" style="--fs:7;letter-spacing:.05em;margin-top:calc(3*var(--u))">Each leaves the same gap</p>
+        <div class="pr-fill">
+          <p class="t-pl" style="--fs:9;--lh:1.3"><b>HUMBLE nie zastępuje istniejących warstw — wypełnia <em>tę lukę</em>: tanio (<em>poniżej 10 tys. USD</em>), na każdym pojeździe, od pick-upa po drogi czołg, oraz na pozycjach stacjonarnych.</b></p>
+          <p class="t-cap" lang="en" style="--fs:6">HUMBLE doesn’t replace existing layers — it fills the gap: cheaply (under $10k), on any vehicle, from pick-ups to expensive tanks, and on static positions.</p>
+        </div>
+        <div class="gap-chart" role="img" aria-label="Zasięg skuteczności: podejście tradycyjne działa daleko, efektory po wskazaniu celu, zagłuszarki tylko na drony radiowe. Kilka metrów od nas nie działa żadne z nich.">
+          <div class="gap-zone"><span>Luka</span><span lang="en">The gap</span><span class="gap-nopair"><span>brak pary detektor + efektor</span><small lang="en">no detector + effector pair</small></span></div>
+          <div class="gap-row" style="--a:30%;--b:100%">
+            <p class="gap-name"><b>01</b> <span>Tradycyjne</span> <span lang="en">Traditional</span></p>
+            <div class="gap-track"><i class="gap-bar"><b class="gap-cost" aria-label="drogie">$$$</b></i></div>
+            <p class="gap-note"><span>duże cele, daleko</span><span class="sep"> · </span><span lang="en">bigger targets, at range</span></p>
+          </div>
+          <div class="gap-row" style="--a:22%;--b:78%">
+            <p class="gap-name"><b>02</b> <span>Inteligentne efektory kinetyczne</span> <span lang="en">Smarter kinetic effectors</span></p>
+            <div class="gap-track"><i class="gap-bar"><b class="gap-cost" aria-label="drogie">$$</b></i></div>
+            <p class="gap-note"><span>po wskazaniu celu</span><span class="sep"> · </span><span lang="en">once cued</span></p>
+          </div>
+          <div class="gap-row" style="--a:0%;--b:46%">
+            <p class="gap-name"><b>03</b> <span>Zagłuszarki</span> <span lang="en">Jammers</span></p>
+            <div class="gap-track"><i class="gap-bar gap-part"></i></div>
+            <p class="gap-note"><span>tylko drony radiowe</span><span class="sep"> · </span><span lang="en">radio-controlled only</span></p>
+          </div>
+          <div class="gap-row gap-humble" style="--a:0%;--b:22%">
+            <p class="gap-name"><b>04</b> <span class="gap-hb">HUMBLE</span></p>
+            <div class="gap-track"><i class="gap-bar"></i></div>
+          </div>
+          <div class="gap-axis"><span><span>kilka metrów</span><span class="sep"> · </span><span lang="en">metres</span></span><span><span>kilometry</span><span class="sep"> · </span><span lang="en">kilometres</span></span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= OUR VISION: sensor + any effector hunting a fibre-optic drone ================= -->
+<section class="spread" id="vision" aria-label="Nasza wizja · Our vision">
+  <div class="stage">
+    <svg class="bg-swoosh" viewBox="0 0 841.9 595.3" aria-hidden="true">
+      <path d="M-640 180 C-80 330 520 470 1480 420 L1480 500 C520 552 -100 410 -640 262 Z" fill="#2A4674" opacity=".1"/>
+      <path d="M-640 300 C-60 440 540 560 1480 520" fill="none" stroke="#2A4674" stroke-width="1.2" opacity=".3"/>
+    </svg>
+    <div class="panel p-vis" data-swoosh>
+      <div class="blk" style="--x:14.2;--y:20;--w:250">
+        <h2 class="t-h1 nw" style="--fs:20">NASZA WIZJA</h2>
+        <p class="t-en t-upper" lang="en" style="--fs:7.5;letter-spacing:.05em;margin-top:calc(4*var(--u))">OUR VISION</p>
+      </div>
+      <div class="blk vis-lead" style="--x:297.6;--y:22;--w:255">
+        <p class="t-lead" style="--fs:13;--lh:1.25">Stawiamy na <em>deterministyczną radiometrię</em> — wykrywanie niezależne od tego, <em>jak dron jest sterowany</em> i <em>w jakich warunkach</em> leci.</p>
+        <p class="t-en" lang="en" style="--fs:7.5;--lh:1.45;margin-top:calc(4*var(--u))">We bet on <em>deterministic radiometry</em> — detection that works regardless of <em>field conditions</em> and <em>drone control method</em>.</p>
+      </div>
+      <div class="blk vis-scene" style="--x:14.2;--y:100;--w:815">
+        <span aria-hidden="true" class="vis-word vis-w1" style="--dl:1.5%;--ml:0%;--mb:0%">HUMBLE</span>
+        <span aria-hidden="true" class="vis-word vis-w2" style="--dl:53%;--ml:52%;--mb:0%"><span class="vis-note"><span class="vn-a">* </span><span class="vn-pl">Nie produkujemy efektorów</span><span class="vn-dot"> · </span><span class="vn-en" lang="en">we don’t make effectors</span></span><span class="vw-txt" data-en-html="ANY<br>EFFECTOR">DOWOLNY<br>EFEKTOR</span><span class="vn-ast">*</span></span>
+        <p class="sr-only">* Nie produkujemy efektorów. We don’t make effectors.</p>
+        <div class="vis-obj vis-drone loopvid" style="--dl:61%;--dt:14%;--dw:38%;--ml:6%;--mt:0%;--mw:92%">
+          <img class="spin-poster" src="assets/vision/drone-loop.webp" alt="" width="900" height="515" decoding="async">
+          <canvas data-spin="assets/vision/drone-loop.mp4" data-loop aria-hidden="true"></canvas>
+        </div>
+        <div class="vis-obj vis-front vis-launcher loopvid" style="--dl:22%;--dt:23%;--dw:46%;--ml:26%;--mt:63%;--mw:74%">
+          <img class="spin-poster" src="assets/vision/launcher-loop.webp?v=202611010010" alt="" width="980" height="695" decoding="async">
+          <canvas data-spin="assets/vision/launcher-loop.mp4?v=202611010010" data-loop aria-hidden="true"></canvas>
+        </div>
+        <span aria-hidden="true" class="vis-plus" style="--dl:25%;--dt:13%;--ml:15%;--mt:89%">+</span>
+        <img class="vis-obj vis-rig" src="assets/vision/rig.webp" alt="" width="760" height="1186" decoding="async" style="--dl:8%;--dt:20.7%;--dw:17%;--ml:0%;--mt:59.5%;--mw:34%">
+        <div class="blk vis-lead vis-layer" style="--x:564.1;--y:-36;--w:250">
+        <p class="t-lead" style="--fs:13;--lh:1.25">Do współpracy z <em>tanimi kinetycznymi interceptorami krótkiego zasięgu</em> i do wdrożeń <em>na dużą skalę</em>.</p>
+        <p class="t-en" lang="en" style="--fs:7.5;--lh:1.45;margin-top:calc(4*var(--u))">To be used with <em>cheap short-range kinetic interceptors</em> and deployed <em>at scale</em>.</p>
+      </div>
+      </div>
+      <p class="sr-only">Sensor HUMBLE razem z dowolnym efektorem namierza drona sterowanego światłowodem. HUMBLE sensor plus any effector hunting a fibre-optic drone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OUR PATH: sensing technologies we considered (booklet-style spread) ================= -->
+<section class="spread" id="mission" aria-label="Nasza droga · Our path">
+  <div class="stage">
+    <svg class="bg-swoosh" viewBox="0 0 841.9 595.3" aria-hidden="true">
+      <path d="M-640 700 C-160 470 420 150 1480 60 L1480 150 C440 232 -120 548 -640 790 Z" fill="#2A4674" opacity=".1"/>
+      <path d="M-640 815 C-130 560 470 266 1480 170" fill="none" stroke="#2A4674" stroke-width="1.2" opacity=".3"/>
+    </svg>
+
+    <!-- our mission: one sentence + the three alternatives and why they fall short -->
+    <div class="panel p-mis" data-swoosh>
+      <div class="blk" style="--x:14.2;--y:20;--w:250">
+        <h2 class="t-h1 nw" style="--fs:20">NASZA DROGA</h2>
+        <p class="t-en t-upper" lang="en" style="--fs:7.5;letter-spacing:.05em;margin-top:calc(4*var(--u))">OUR PATH</p>
+      </div>
+      <div class="blk mis-lead" style="--x:297.6;--y:22;--w:520">
+        <p class="t-lead" style="--fs:13;--lh:1.25">Technologie, które rozważyliśmy, zanim postawiliśmy na <em>stos technologiczny z przemysłu motoryzacyjnego</em>.</p>
+        <p class="t-en" lang="en" style="--fs:7.5;--lh:1.45;margin-top:calc(4*var(--u))">Technologies we considered before choosing our <em>automotive-industry-based stack</em>.</p>
+      </div>
+      <div class="alts">
+      <article class="blk alt" style="--x:14.2;--y:96;--w:250;--arn:0.38;--hc:min(380px,92vw);--fh:.973;--fb:.012;--pcx:62%;--pr:14%;--dip:-6px">
+        <div class="alt-stage">
+          <h3 class="alt-word" aria-label="Detektory RF · RF detectors">RF</h3>
+          <div class="spin" style="--ar:304/800">
+            <img class="spin-poster" src="assets/spin/chuyka-poster.webp" alt="Detektory RF" width="304" height="800" decoding="async">
+            <canvas data-spin="assets/spin/chuyka.mp4" aria-hidden="true"></canvas>
+          </div>
+        </div>
+        <ul class="misses">
+          <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Nie wykryją dronów sterowanych przez AI ani światłowodowych</b></p><p class="t-cap" lang="en" style="--fs:6">Blind to AI-controlled and fibre-optic drones</p></li>
+          <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Nie podają dokładnej pozycji drona</b></p><p class="t-cap" lang="en" style="--fs:6">No accurate drone position</p></li>
+        </ul>
+      </article>
+      <article class="blk alt" style="--x:297.6;--y:96;--w:250;--arn:0.917;--sink:10%;--lift:26;--hc:min(230px,54vw);--fh:.831;--fb:.012;--pcx:56%">
+        <div class="alt-stage">
+          <h3 class="alt-word" aria-label="Radary · Radars">RADAR</h3>
+          <div class="spin" style="--ar:660/720">
+            <img class="spin-poster" src="assets/spin/radar-poster.webp" alt="Radary" width="660" height="720" decoding="async">
+            <canvas data-spin="assets/spin/radar.mp4" aria-hidden="true"></canvas>
+          </div>
+        </div>
+        <ul class="misses">
+          <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Ślepe na wolne cele z bliska</b></p><p class="t-cap" lang="en" style="--fs:6">Blind to relatively slow targets at close range</p></li>
+          <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Bardzo drogie</b></p><p class="t-cap" lang="en" style="--fs:6">Very expensive</p></li>
+          <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Same się zdradzają — ich emisję łatwo wykryć</b></p><p class="t-cap" lang="en" style="--fs:6">Easy for the adversary to detect</p></li>
+        </ul>
+      </article>
+      <article class="blk alt" style="--x:578.3;--y:96;--w:250;--arn:1.524;--sink:15%;--lift:40;--maxw:106%;--cx:52%;--hc:min(190px,42vw);--fh:.74;--fb:.018;--pcx:50%">
+        <div class="alt-stage">
+          <h3 class="alt-word" aria-label="Kamery · Cameras" data-en="CAMERAS">KAMERY</h3>
+          <div class="spin" style="--ar:960/630">
+            <img class="spin-poster" src="assets/spin/stereo-poster.webp" alt="Kamery" width="960" height="630" decoding="async">
+            <canvas data-spin="assets/spin/stereo.mp4" aria-hidden="true"></canvas>
+          </div>
+        </div>
+        <ul class="misses">
+          <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Nie podają dokładnej pozycji drona</b></p><p class="t-cap" lang="en" style="--fs:6">No exact drone position</p></li>
+          <li><p class="t-pl" style="--fs:9;--lh:1.25"><b>Nie działają przy każdej pogodzie i oświetleniu</b></p><p class="t-cap" lang="en" style="--fs:6">Not in all weather and lighting</p></li>
+        </ul>
+      </article>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ================= DEMO VIDEO ================= -->
 <section class="demo" id="demo" aria-label="Demo" data-swoosh="all">
   <div class="demo-in">
     <span class="tag">Demo</span>
     <h2 class="t-h1">Zobacz, jak to działa</h2>
     <p class="t-cap" lang="en">See it in action</p>
+    <div class="demo-tabs" role="tablist">
+      <button type="button" class="demo-tab on" role="tab" aria-selected="true" data-clip="live" data-en="Live detection">Wykrywanie na żywo</button>
+      <button type="button" class="demo-tab" role="tab" aria-selected="false" data-clip="shake" data-en="Shake it">Shake it</button>
+      <button type="button" class="demo-tab" role="tab" aria-selected="false" data-clip="pres" data-en="Presentation">Prezentacja</button>
+    </div>
     <div class="player">
-      <video controls playsinline preload="none" poster="assets/video/poster.webp">
-        <source src="assets/video/demo-720.mp4" type="video/mp4" media="(max-width: 900px)">
-        <source src="assets/video/demo-1080.mp4" type="video/mp4">
-      </video>
+      <video controls playsinline muted preload="none" poster="assets/demo/live-detection.webp?v=2"></video>
+      <div class="player-stub" hidden><span data-en="Presentation coming soon">Prezentacja już wkrótce</span></div>
     </div>
   </div>
 </section>
 
 <!-- ================= INSIDE SPREAD ================= -->
-<section class="spread" id="inside" aria-label="Kim jesteśmy">
+<section class="spread" id="inside" aria-label="Kim jesteśmy i gdzie jesteśmy">
   <div class="stage">
     <svg class="bg-swoosh" viewBox="0 0 841.9 595.3" aria-hidden="true">
       <path d="M-600 421.8 L-8.5 309.5 C181.5 273.5 381.5 141.5 564.1 63.5 L1450 -315 L1450 -205 L564.1 143.5 C386.5 213.5 186.5 341.5 -8.5 401.5 L-600 583.5 Z" fill="#2A4674" opacity=".1"/>
@@ -170,8 +398,8 @@
     <!-- inside middle: who we are -->
     <div class="panel p-imid">
       <div class="blk" style="--x:297.6;--y:16;--w:252">
-        <h2 class="t-h1 nw" style="--fs:20">KIM JESTEŚMY</h2>
-        <p class="t-en" lang="en" style="--fs:7.5;letter-spacing:.05em;margin-top:calc(4*var(--u))">Who we are</p>
+        <h2 class="t-h1 who-h" style="--fs:20">KIM JESTEŚMY I GDZIE JESTEŚMY</h2>
+        <p class="t-en t-upper" lang="en" style="--fs:7.5;letter-spacing:.05em;margin-top:calc(4*var(--u))">WHO WE ARE AND WHERE WE ARE</p>
         <p class="t-pl" style="--fs:9.5;--lh:1.4;margin-top:calc(12*var(--u))"><b>Humble</b> buduje autonomiczną warstwę sensoryczną aktywnego pancerza przeciw dronom kamikadze.</p>
         <p class="t-en" lang="en" style="--fs:7.5;--lh:1.4;margin-top:calc(4*var(--u))"><b>Humble</b> builds the autonomous sensing layer for active armor against kamikaze drones.</p>
         <ul class="items" style="margin-top:calc(12*var(--u))">
@@ -188,8 +416,8 @@
     <!-- inside left: who we look for -->
     <div class="panel p-ileft">
       <div class="blk" style="--x:14.2;--y:16;--w:250">
-        <h2 class="t-h1 nw" style="--fs:20">KOGO SZUKAMY</h2>
-        <p class="t-en" lang="en" style="--fs:7.5;margin-top:calc(4*var(--u))">Who we are looking for</p>
+        <h2 class="t-h1 nw who-l" style="--fs:20">KOGO SZUKAMY</h2>
+        <p class="t-en t-upper" lang="en" style="--fs:7.5;margin-top:calc(4*var(--u))">WHO WE ARE LOOKING FOR</p>
         <ul class="items" style="margin-top:calc(12*var(--u))">
           <li><p class="t-pl" style="--fs:9"><b>Inwestorów</b> — którzy chcą wesprzeć obiecujący polski projekt obronny.</p>
               <p class="t-en" lang="en" style="--fs:7"><b>Investors</b> — looking to back a promising Poland-based defence project.</p></li>
@@ -217,15 +445,15 @@
     <!-- inside right: prototype specs -->
     <div class="panel p-iright" data-swoosh>
       <div class="blk" style="--x:578.3;--y:16;--w:250">
-        <span class="tag" style="--fs:7">Prototyp · <span lang="en">Prototype</span></span>
+        <span class="tag" style="--fs:7"><span>Prototyp</span><span class="sep"> · </span><span lang="en">Prototype</span></span>
         <h2 class="t-h2 nw" style="--fs:15;margin-top:calc(4*var(--u))">Parametry prototypu</h2>
         <p class="t-cap" lang="en" style="--fs:7.5;margin-top:calc(4*var(--u))">Prototype specifications</p>
         <div class="specs" style="margin-top:calc(14*var(--u))">
           <div><b class="t-big nw" style="--fs:19">1–20 m</b><p class="t-spec" style="--fs:9.5">Zasięg wykrywania</p><p class="t-cap" lang="en" style="--fs:6.5">Detection range</p>
-            <p class="t-note" style="--fs:6">35+ m — w fazie rozwoju<br><span lang="en">35+ m — in development</span></p></div>
+            <p class="t-note" style="--fs:6"><span>35+ m — w fazie rozwoju</span><br><span lang="en">35+ m — in development</span></p></div>
           <div><b class="t-big nw" style="--fs:19">&lt; 1 s</b><p class="t-spec" style="--fs:9.5">Czas wykrycia</p><p class="t-cap" lang="en" style="--fs:6.5">Time to detect</p></div>
           <div><b class="t-big nw" style="--fs:19">120° × 90°</b><p class="t-spec" style="--fs:9.5">Pole widzenia</p><p class="t-cap" lang="en" style="--fs:6.5">Field of view</p>
-            <p class="t-note" style="--fs:6">Łatwa rozbudowa do kopuły 360°×90°<br><span lang="en">Easy extension to 360°×90° dome</span></p></div>
+            <p class="t-note" style="--fs:6"><span>Łatwa rozbudowa do kopuły 360°×90°</span><br><span lang="en">Easy extension to 360°×90° dome</span></p></div>
           <div><b class="t-big nw" style="--fs:19">&lt; 10 cm</b><p class="t-spec" style="--fs:9.5">Dokładność detekcji</p><p class="t-cap" lang="en" style="--fs:6.5">Detection accuracy</p></div>
         </div>
       </div>
@@ -243,14 +471,17 @@
 
 <footer class="foot">
   <a class="d-flex" href="mailto:hq@humbledefence.com">hq@humbledefence.com</a>
-  <span class="d-flex">Odpowiadamy w ciągu 24 godzin · <span lang="en">We answer within 24 hours</span></span>
+  <span class="d-flex"><span>Odpowiadamy w ciągu 24 godzin</span><span class="sep"> · </span><span lang="en">We answer within 24 hours</span></span>
   <span>© 2026 Humble</span>
 </footer>
 </main>
 
-<a class="mail" href="mailto:hq@humbledefence.com" aria-label="Email hq@humbledefence.com">
+<div class="fabs">
+  <a class="fab jump" href="#demo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg><span data-en="Jump to demo">Zobacz demo</span></a>
+<a class="fab mail" href="mailto:hq@humbledefence.com" aria-label="Email hq@humbledefence.com">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3z M3 7l9 6 9-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
   <span>hq@humbledefence.com</span>
 </a>
+</div>
 </body>
 </html>

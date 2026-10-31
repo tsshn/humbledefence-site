@@ -61,7 +61,14 @@
   const SW = '<svg class="m-swoosh" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
     '<path d="M0 72 C30 66 65 40 100 26 L100 38 C66 50 32 76 0 84 Z" fill="#2A4674" opacity=".1"/>' +
     '<path d="M0 91 C35 83 68 56 100 45" fill="none" stroke="#2A4674" stroke-width="1.2" vector-effect="non-scaling-stroke" opacity=".3"/></svg>';
-  document.querySelectorAll('[data-swoosh]').forEach(el => el.insertAdjacentHTML('afterbegin', SW));
+  // tall, gentler variant for phone-width sections that carry both shapes (data-swoosh="both")
+  const SW_TALL = '<svg class="m-swoosh sw-tall" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
+    '<path d="M0 64 C30 61 66 52 100 45 L100 50 C66 57 32 66 0 69 Z" fill="#2A4674" opacity=".1"/>' +
+    '<path d="M0 74 C35 71 68 63 100 56" fill="none" stroke="#2A4674" stroke-width="1.2" vector-effect="non-scaling-stroke" opacity=".3"/></svg>';
+  document.querySelectorAll('[data-swoosh]').forEach(el => {
+    if (el.dataset.swoosh === 'both') el.insertAdjacentHTML('afterbegin', SW.replace('class="m-swoosh"', 'class="m-swoosh sw-wide"') + SW_TALL);
+    else el.insertAdjacentHTML('afterbegin', SW);
+  });
 
   if (REDUCED) document.querySelectorAll('animateTransform').forEach(a => a.remove());
 
@@ -221,6 +228,7 @@
     driftFrozen = false;
     lastT = -2; onDuo();
     arts.forEach(s => trigger.observe(s));
+    document.querySelectorAll('[data-in]').forEach(s => trigger.observe(s));   // HTML leaders (problem block)
   };
   const handoff = () => {
     if (handing) return;
@@ -244,7 +252,11 @@
   };
   const tryHandoff = () => { if (assetsReady && (cycles >= 1 || REDUCED)) handoff(); };
   if (cycleEl) cycleEl.addEventListener('animationiteration', () => { cycles++; tryHandoff(); });
-  const ready = [document.fonts ? document.fonts.ready : Promise.resolve(), duoImgs, ...arts.map(s => loadImages(s))];
+  // everything shown on the page must be downloaded + decoded before the loader lifts
+  const pageImgs = [...document.images].map(im => (im.decode ? im.decode() : Promise.resolve()).catch(() => {}));
+  const posters = [...document.querySelectorAll('video[poster]')].map(v => { const im = new Image(); im.src = v.poster; return im.decode().catch(() => {}); });
+  const ready = [document.fonts ? document.fonts.ready : Promise.resolve(), duoImgs, window.HD_SPINS_READY || Promise.resolve(),
+    ...pageImgs, ...posters, ...arts.map(s => loadImages(s))];
   Promise.race([Promise.all(ready), new Promise(r => setTimeout(r, 12000))]).then(() => {
     // final fit once fonts and layout have settled (fixes the first-load crop on iPhone)
     document.querySelectorAll('.m-visual[data-fit]').forEach(fitBox);
@@ -253,9 +265,41 @@
     setTimeout(() => { cycles = Math.max(cycles, 1); tryHandoff(); }, 3000);   // if the tab throttled animations
   });
 
-  // 6) floating email appears once the visitor starts scrolling
-  const mail = document.querySelector('.mail');
-  const onScroll = () => mail.classList.toggle('show', scrollY > innerHeight * 0.35);
+  // 6) floating buttons (jump to demo + email) appear once the visitor starts scrolling;
+  //    the demo button steps aside while the demo itself is on screen
+  const fabs = document.querySelector('.fabs');
+  const demo = document.getElementById('demo');
+  const onScroll = () => {
+    fabs.classList.toggle('show', scrollY > innerHeight * 0.35);
+    const r = demo.getBoundingClientRect();
+    fabs.classList.toggle('at-demo', r.top < innerHeight * 0.6 && r.bottom > innerHeight * 0.4);
+  };
   addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+  fabs.querySelector('.jump').addEventListener('click', e => e.currentTarget.blur());   // no lingering focus after the jump
+
+  // 7) demo: three clips behind three buttons — nothing autoplays; picking a clip starts it
+  const CLIPS = {
+    live: { src: 'assets/demo/live-detection', poster: 'assets/demo/live-detection.webp?v=2' },
+    shake: { src: 'assets/demo/shake-it', poster: 'assets/demo/shake-it.webp?v=2' },
+    pres: null,                                            // presentation: coming soon
+  };
+  const video = demo.querySelector('video');
+  const stub = demo.querySelector('.player-stub');
+  const res = () => (matchMedia('(max-width: 900px)').matches ? '720' : '1080');
+  const load = key => {
+    const c = CLIPS[key];
+    video.pause();
+    stub.hidden = !!c;
+    video.hidden = !c;
+    if (!c) { video.removeAttribute('src'); video.load(); return false; }
+    video.poster = c.poster;
+    video.src = `${c.src}-${res()}.mp4?v=2`;
+    return true;
+  };
+  load('live');                                            // first clip ready behind its poster, not playing
+  demo.querySelectorAll('.demo-tab').forEach(b => b.addEventListener('click', () => {
+    demo.querySelectorAll('.demo-tab').forEach(o => { o.classList.toggle('on', o === b); o.setAttribute('aria-selected', String(o === b)); });
+    if (load(b.dataset.clip)) { const p = video.play(); if (p) p.catch(() => {}); }
+  }));
 })();

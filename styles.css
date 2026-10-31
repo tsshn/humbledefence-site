@@ -16,7 +16,7 @@
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body { overflow-x: clip; margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-text); font-weight: 600; -webkit-font-smoothing: antialiased; }
-h1, h2, p, ul { margin: 0; padding: 0; }
+h1, h2, h3, p, ul { margin: 0; padding: 0; font-size: inherit; }
 ul { list-style: none; }
 em { font-style: normal; color: var(--red); }
 b { font-weight: 800; }
@@ -138,6 +138,8 @@ a { color: inherit; }
 .art { display: none; }
 .panel { width: 100%; padding: 44px 22px 8px; }
 .panel > .blk, .contact-m > :not(.m-swoosh) { max-width: 680px; margin-inline: auto; }
+.panel > .vis-scene { max-width: 880px; }
+.panel > .alts { max-width: 680px; margin-inline: auto; }
 .blk { position: relative; }
 .m-visual { margin: 24px -22px 0; }
 .m-visual > svg { width: 100%; height: 100%; }
@@ -216,40 +218,68 @@ a { color: inherit; }
 }
 
 /* ---------- demo video ---------- */
-.demo { position: relative; background: var(--bg); padding: 16px 12px 28px; }
-@media (min-width: 1100px) and (orientation: landscape) { .demo { padding: 10vh 22px; } }
+.demo { position: relative; background: var(--bg); padding: 40px 12px 28px; }
+@media (min-width: 1100px) and (orientation: landscape) { .demo { padding: 6vh 22px 10vh; } }
 .demo-in { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; text-align: center; }
 @media (max-width: 1099px), (orientation: portrait) { .demo > .m-swoosh { display: none; } }
 .demo .tag { font-size: 12px; --u: 1.3px; }
 .demo .t-h1 { font-size: clamp(24px, 4.2vw, 52px); margin-top: 10px; }
 .demo .t-cap { font-size: 13px; margin-top: 6px; }
 .player {
-  margin: 16px auto 0; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; overflow: hidden;
+  margin: 28px auto 0; aspect-ratio: 16 / 9; background: #000; border-radius: 2px; overflow: hidden;
   width: min(100%, calc((100svh - 240px) * 16 / 9)); min-width: min(100%, 320px);
   box-shadow: 0 24px 60px rgba(13, 27, 42, .22);
 }
-.player video { width: 100%; height: 100%; display: block; }
+.player video { width: 100%; height: 100%; display: block; object-fit: cover; background: #000; }
 
 /* ---------- footer + floating email ---------- */
 .foot { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 28px; padding: 40px 22px 110px; font-size: 13px; color: var(--steel); }
 .foot a { color: var(--red); font-weight: 800; text-decoration: none; }
-.mail {
+.fabs {
   position: fixed; z-index: 10; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom));
-  display: flex; align-items: center; gap: 10px; padding: 12px 18px 12px 14px; border-radius: 999px;
+  display: flex; align-items: center; gap: 10px;
+  opacity: 0; transform: translateY(24px); pointer-events: none; transition: opacity .35s, transform .35s;
+}
+.fabs.show { opacity: 1; transform: none; pointer-events: auto; }
+.fab {
+  display: flex; align-items: center; gap: 10px; padding: 12px 18px 12px 14px; border-radius: 999px; white-space: nowrap;
   background: rgba(13, 27, 42, .9); color: #fff; font: 800 14px var(--f-text); text-decoration: none;
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 10px 30px rgba(13,27,42,.25);
-  opacity: 0; transform: translateY(24px); pointer-events: none;
-  transition: opacity .35s, transform .35s, background .2s;
+  transition: background .2s, transform .2s, opacity .3s, max-width .35s;
 }
-.mail svg { width: 20px; height: 20px; color: var(--red); transition: color .2s; }
-.mail.show { opacity: 1; transform: none; pointer-events: auto; }
-.mail:hover, .mail:focus-visible { background: var(--red); transform: translateY(-3px); }
-.mail:hover svg, .mail:focus-visible svg { color: #fff; }
+.fab svg { flex: none; width: 20px; height: 20px; color: var(--red); transition: color .2s; }
+.fab:focus-visible { background: var(--red); transform: translateY(-3px); }
+.fab:focus-visible svg { color: #fff; }
+@media (hover: hover) and (pointer: fine) {   /* touch screens keep :hover after a tap: hover styles for mice only */
+  .fab:hover { background: var(--red); transform: translateY(-3px); }
+  .fab:hover svg { color: #fff; }
+    }
+.fabs.at-demo .jump { opacity: 0; pointer-events: none; }   /* already there */
 @media (max-width: 599px) {
-  .mail { right: 50%; transform: translate(50%, 24px); }
-  .mail.show { transform: translate(50%, 0); }
-  .mail:hover { transform: translate(50%, -3px); }
+  .fabs { right: 50%; transform: translate(50%, 24px); gap: 8px; }
+  .fabs.show { transform: translate(50%, 0); }
+  .fab { padding: 11px 15px 11px 12px; font-size: 13px; gap: 8px; }
+  .fab svg { width: 18px; height: 18px; }
 }
+@media (max-width: 380px) { .fab.mail span { font-size: 12px; } }
+
+/* language toggle: top-left corner of the page (scrolls away with it) */
+.lang { position: absolute; z-index: 20; top: calc(10px + env(safe-area-inset-top)); left: 12px; display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: rgba(255, 255, 255, .6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 2px 10px rgba(13, 27, 42, .08); }
+.lang a { padding: 5px 9px; border-radius: 999px; font: 500 11px / 1 var(--f-mono); letter-spacing: .04em; color: var(--steel); text-decoration: none; transition: background .2s, color .2s; }
+.lang a:hover { color: var(--ink); }
+.lang a[aria-current="true"] { background: var(--ink); color: #fff; }
+html.loading .lang { visibility: hidden; }
+
+
+/* demo: three clips behind three buttons */
+.demo-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; width: max-content; max-width: 100%; margin: 18px auto 0; }   /* equal-width buttons, centred as one group */
+.demo-tab { appearance: none; cursor: pointer; padding: 9px 14px; white-space: nowrap; text-align: center; border: 1.5px solid rgba(13, 27, 42, .2); border-radius: 999px; background: transparent; font: 800 13px var(--f-text); color: var(--ink); transition: background .2s, color .2s, border-color .2s; }
+.demo-tab:hover { border-color: var(--ink); }
+.demo-tab.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.player { position: relative; }
+.player video[hidden] { display: none; }
+.player-stub { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(135deg, #16263a, #0D1B2A); color: rgba(255, 255, 255, .75); font: 500 13px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; }
+.player-stub[hidden] { display: none; }
 
 /* ---------- loader: target spins, dashes ±20 px, blinks, spins again ---------- */
 html.loading, html.loading body { overflow: hidden; }
@@ -271,3 +301,290 @@ html.handoff .drift { visibility: hidden; }
 @keyframes ld-move { 0%, 24% { transform: translate(0, 0) } 34% { transform: translate(24px, -16px) } 44% { transform: translate(-20px, 18px) } 54%, 100% { transform: translate(0, 0) } }
 @keyframes ld-blink { 0%, 58%, 100% { opacity: 1 } 61% { opacity: 0 } 64% { opacity: 1 } 67% { opacity: 0 } 70% { opacity: 1 } }
 @media (prefers-reduced-motion: reduce) { .loader * { animation: none !important; } }
+
+
+/* ---------- our mission: booklet-style spread with the three alternatives ---------- */
+.p-mis { order: 1; padding-bottom: 36px; }
+.mis-lead { margin-top: 18px; }
+.alts { display: flex; flex-direction: column; gap: 40px; margin-top: 18px; }   /* phones: room between one device's reasons and the next device */
+.alt:not(.blk) { position: relative; }
+
+/* stage: a huge outlined name behind the spinning device; the device overlaps it */
+.alt-stage { position: relative; height: var(--stage, min(420px, calc((100vw - 44px) * .82 / var(--arn, 1) + 30px))); }   /* phones: wide devices get a shorter stage */
+.alt-word {
+  position: absolute; left: -.04em; bottom: 0; z-index: 0; white-space: nowrap; pointer-events: none;
+  font: 900 min(calc(54 * var(--uf)), calc((100vw - 44px) / 6.3)) / .8 var(--f-display); letter-spacing: -.03em;
+  color: rgba(13, 27, 42, .075);                    /* a big quiet name the device stands on */
+}
+.spin { position: absolute; inset: 0; z-index: 1; }   /* device stands on the big name, covering its upper part */
+.spin > img, .spin > canvas { position: absolute; left: 58%; bottom: 0; width: auto; height: auto; max-width: 84%; max-height: 100%; transform: translate(-50%, var(--sink, 0%)); }   /* box = device's own aspect; --sink removes the render's empty space below it */
+.spin > canvas { opacity: 0; transition: opacity .25s; }
+.spin.live > canvas { opacity: 1; }
+.spin.live > .spin-poster { opacity: 0; transition: opacity .25s; }
+/* name + reasons tuck under the device's base */
+.alt-name { position: relative; z-index: 2; margin-top: calc(6 * var(--u)); font-weight: 800; line-height: 1.3; }
+.alt-name .t-en { font-weight: 600; letter-spacing: .03em; }
+.misses { position: relative; z-index: 2; display: flex; flex-direction: column; gap: calc(7 * var(--u)); margin-top: calc(12 * var(--u)); }
+.misses li { position: relative; padding-left: calc(12 * var(--u)); }
+.misses li::before { content: '✕'; position: absolute; left: 0; top: 0; font-family: var(--f-display); font-weight: 900; color: var(--red); font-size: calc(7.5 * var(--uf)); line-height: 1.55; -webkit-text-stroke: .06em var(--red); }
+.misses p + p { margin-top: calc(3 * var(--u)); }
+@media (min-width: 1100px) and (orientation: landscape) {
+  .alts { display: contents; }
+  .alt-stage { --stage: calc(270 * var(--u)); }
+  .spin > img, .spin > canvas { left: var(--cx, 58%); max-width: var(--maxw, 84%); transform: translate(-50%, calc(var(--sink, 0%) - var(--lift, 0) * var(--u))); }   /* desktop: radar + cameras sit higher, leaving their names readable */
+  .alt-word { font-size: calc(44 * var(--u)); }
+}
+
+@media (max-width: 1099px), (orientation: portrait) {
+  .alt { position: relative; }
+  /* phones: size each device by its VISIBLE height (--hc), measured over the whole turn (--fh visible share,
+     --fb empty share below); the device stands 16px into its big name and the stage hugs it */
+  .alt-stage { height: calc(var(--hc) + 22px - var(--dip, 16px)); }   /* --dip: how far the device rises out of its word (negative = sinks in) */
+  .spin > img, .spin > canvas {
+    left: auto; right: var(--pr, 0); height: calc(var(--hc) / var(--fh)); width: auto; aspect-ratio: var(--ar);
+    max-width: none; max-height: none;                                     /* devices stick to the right edge */
+    transform: translate(0, calc(var(--hc) / var(--fh) * var(--fb) - var(--dip, 16px)));
+  }
+}
+
+/* ---------- our vision: sensor + any effector hunting a fibre-optic drone ---------- */
+.hl { color: var(--ink); }
+.p-vis { padding-top: 28px; padding-bottom: 36px; }   /* + the heading's own line spacing ≈ 36px, matching the gap above the colour change */
+.vis-lead { margin-top: 18px; }
+.vis-scene { position: relative; aspect-ratio: 346 / 630; margin-top: 12px; }
+.vis-obj, .vis-target { position: absolute; left: var(--ml); top: var(--mt); width: var(--mw); height: auto; }
+.vis-front { z-index: 3 !important; }
+.vis-obj { z-index: 2; filter: drop-shadow(0 10px 14px rgba(13, 27, 42, .14)); }
+.vis-target { z-index: 3; overflow: visible; }
+.vis-word {
+  position: absolute; left: var(--ml); bottom: var(--mb, 0); z-index: 0; white-space: nowrap;
+  font: 900 calc((100vw - 44px) / 13) / .8 var(--f-display); letter-spacing: -.03em; color: rgba(13, 27, 42, .075);
+}
+.vis-plus {
+  position: absolute; left: var(--ml); top: var(--mt); z-index: 1; transform: translate(-50%, -50%);
+  font: 900 calc((100vw - 44px) / 4.5) / 1 var(--f-display); color: rgba(13, 27, 42, .075);
+}
+.vis-points { display: flex; flex-direction: column; gap: 12px; margin-top: 22px; }
+.vis-points li { position: relative; padding-left: 14px; }
+.vis-points li::before { content: ''; position: absolute; left: 0; top: .45em; width: 6px; height: 6px; background: var(--red); }
+.vis-points p + p { margin-top: 3px; }
+@media (min-width: 1100px) and (orientation: landscape) {
+  .panel > .vis-scene, .panel > .vis-points { max-width: none; margin: 0; }
+  .vis-scene { aspect-ratio: 815 / 380; margin-top: 0; }
+  .vis-obj, .vis-target { left: var(--dl); top: var(--dt); width: var(--dw); }
+  .vis-word { left: var(--dl); bottom: 0; font-size: calc(48 * var(--u)); }
+  .vis-plus { left: var(--dl); top: var(--dt); font-size: calc(150 * var(--u)); }
+  .vis-points { display: grid; grid-template-columns: 283.4fr 280.7fr 251fr; gap: 0; }
+  .vis-points li { padding-left: calc(11 * var(--u)); padding-right: calc(18 * var(--u)); }
+  .vis-points li::before { width: calc(5 * var(--u)); height: calc(5 * var(--u)); }
+}
+
+/* desktop: mission + vision spreads are only as tall as their content (no full-screen bands) */
+@media (min-width: 1100px) and (orientation: landscape) {
+  #mission, #vision { min-height: 0; padding: 2vh 0; }
+  #mission .stage { aspect-ratio: 841.9 / 474; }
+  #vision .stage { aspect-ratio: 841.9 / 490; }   /* no bullet row any more */
+}
+
+/* vision block: a quiet steel-blue tint of the page background, so the scene reads as its own chapter */
+#mission { background: #E1E5EB; }
+
+
+/* phones: the "detection, tracking and aiming layer" text sits inside the scene, between the drone and the pair */
+.vis-scene > .vis-layer { position: absolute; left: 0; right: 0; top: 27.5%; margin: 0; z-index: 5; max-width: none; }
+@media (min-width: 1100px) and (orientation: landscape) {
+  .vis-scene > .vis-layer { right: auto; left: calc(var(--x) * var(--u)); top: calc(var(--y) * var(--u)); width: calc(var(--w) * var(--u)); }
+}
+
+/* phones: the vision scene flows as a grid — drone, then the layer text, then the sensor+effector pair —
+   so spacing stays even at every phone width (no percentage guessing) */
+@media (max-width: 1099px), (orientation: portrait) {
+  .vis-scene { display: grid; grid-template-columns: 26% 8% 66%; aspect-ratio: auto; margin-top: 0; }
+  .vis-scene > * { position: relative !important; left: auto !important; right: auto !important; top: auto !important; bottom: auto !important; transform: none !important; }
+  .vis-drone  { grid-area: 1 / 1 / 2 / 4; width: 92% !important; justify-self: center; margin: 34px 0 30px; }   /* the image's lower part is the faded fibre: pull the text up so the drone sits centred */
+  .vis-scene > .vis-layer { grid-area: 2 / 1 / 3 / 4; width: auto; margin: 0 0 26px; }
+  .vis-rig    { grid-area: 3 / 1 / 4 / 3; width: 100% !important; align-self: start; }
+  .vis-launcher { grid-area: 3 / 2 / 4 / 4; width: 100% !important; align-self: start; margin-top: 12%; }
+  .vis-plus   { grid-area: 4 / 1 / 5 / 2; justify-self: center; margin-top: -10px; line-height: .8; }
+  .vis-w1     { grid-area: 5 / 1 / 6 / 3; align-self: end; }
+  .vis-w2     { grid-area: 4 / 3 / 6 / 4; align-self: end; justify-self: end; }
+}
+
+/* always-playing transparent loop (net launcher) — poster image sets the size, canvas takes over once frames flow */
+.loopvid > img { display: block; width: 100%; height: auto; }
+.loopvid > canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .25s; }
+.loopvid.live > canvas { opacity: 1; }
+.loopvid.live > img { opacity: 0; transition: opacity .25s; }
+
+/* phones (v2): drone flies in at the right, right where the net goes; layer text closes the block; no bullet list */
+@media (max-width: 1099px), (orientation: portrait) {
+  .vis-drone  { grid-area: 1 / 2 / 2 / 4 !important; width: 74% !important; justify-self: end; align-self: end; margin: 22px -4% -16% 0 !important; z-index: 1; }
+  .vis-rig    { grid-area: 2 / 1 / 3 / 3; margin-top: 4%; }
+  .vis-launcher { grid-area: 2 / 2 / 3 / 4; }
+  .vis-plus   { grid-area: 3 / 1 / 4 / 2; }
+  .vis-w1     { grid-area: 4 / 1 / 5 / 3; }
+  .vis-w2     { grid-area: 3 / 3 / 5 / 4; }
+  .vis-scene > .vis-layer { grid-area: 5 / 1 / 6 / 4; margin: 26px 0 0; }
+  .p-vis .vis-points { display: none; }
+}
+
+/* desktop: both vision statements start on the same line (no px offset on top of booklet units) */
+@media (min-width: 1100px) and (orientation: landscape) { .vis-lead, .mis-lead { margin-top: 0; } }
+
+/* footnote for DOWOLNY EFEKTOR* — lives inside the giant word: same colour, uppercase, wraps within the word's width */
+.vis-note {
+  display: block; width: 0; min-width: 100%;             /* takes the giant word's width, never widens it */
+  white-space: normal; text-transform: uppercase; letter-spacing: .04em;
+  font: 800 11px / 1.25 var(--f-text); color: inherit; margin-bottom: .5em;
+}
+@media (min-width: 1100px) and (orientation: landscape) { .vis-note { font: 700 calc(6.3 * var(--u)) / 1.25 var(--f-display); letter-spacing: .01em; white-space: nowrap; } }
+@media (max-width: 1099px), (orientation: portrait) {
+  /* phones: exactly two lines (PL, then EN), sized to fit the width of DOWOLNY EFEKTOR */
+  .vis-note { font-size: calc((100vw - 44px) * .0244); letter-spacing: .03em; }
+  .vis-note .vn-pl, .vis-note .vn-en { display: block; white-space: nowrap; }
+  .vis-note .vn-dot { display: none; }
+}
+
+/* desktop: both vision statements start on the same line (no px offset on top of booklet units) */
+@media (min-width: 1100px) and (orientation: landscape) { .vis-lead, .mis-lead { margin-top: 0; } }
+
+
+/* desktop: both vision statements start on the same line (no px offset on top of booklet units) */
+@media (min-width: 1100px) and (orientation: landscape) { .vis-lead, .mis-lead { margin-top: 0; } }
+
+
+/* phones: the "+" sits in the gap between HUMBLE and DOWOLNY EFEKTOR */
+@media (max-width: 1099px), (orientation: portrait) {
+  .vis-plus { grid-area: 4 / 1 / 5 / 4 !important; justify-self: start; align-self: end; margin: 0 0 calc((100vw - 44px) / 13 * .95) 41% !important; transform: translateX(-50%) !important; font-size: calc((100vw - 44px) / 7.5) !important; line-height: .8 !important; z-index: 1; }   /* above the end of HUMBLE, level with DOWOLNY */
+}
+
+/* phones: no footnote and no asterisk */
+@media (max-width: 1099px), (orientation: portrait) { .vis-note, .vn-ast { display: none !important; } }
+
+
+/* the drone flies in front of the net launcher */
+.vis-scene > .vis-drone { z-index: 6 !important; }
+
+/* ---------- THE PROBLEM: three answers (traditional layer, smarter effectors, jammers), one gap, and what is left ---------- */
+#problem { background: #E1E5EB; }
+.p-pr { padding-top: 28px; padding-bottom: 44px; }
+.p-pr > * { max-width: 680px; margin-inline: auto; }
+.pr-lead { margin-top: 18px; }
+.pr-act { position: relative; margin-top: 48px; }
+.pr-a1 { margin-top: 32px; }
+.pr-fig { position: relative; z-index: 0; pointer-events: none; }
+.pr-txt { position: relative; z-index: 1; margin-top: 18px; }
+.pr-ground { display: none; }
+/* 01: full render with its ground shadows; the box is the vehicles' own square (x 1154–3667, y 293–2807 of 4800×2807) */
+.pr-fig1 { width: 100%; max-width: 440px; aspect-ratio: 2513 / 2374; margin: 0 auto; }   /* vehicles' box, cut just below the cable reel */
+.pr-fig1 img { position: absolute; max-width: none; height: auto; width: 191.01%; left: -45.92%; top: 0; transform: translateY(-10.44%);
+  -webkit-mask-image: linear-gradient(#000 84%, rgba(0,0,0,.55) 87.5%, transparent 91%); mask-image: linear-gradient(#000 84%, rgba(0,0,0,.55) 87.5%, transparent 91%); }   /* short, steep fade under the reel */
+.pr-tag { display: flex; flex-wrap: wrap; gap: 0 .9em; margin-bottom: calc(6 * var(--u)); font: 500 calc(6.5 * var(--uf)) / 1.4 var(--f-mono); color: var(--red); text-transform: uppercase; letter-spacing: .06em; }
+.pr-tag span[lang] { color: var(--steel); }
+.pr-title + .t-cap { margin-top: calc(2 * var(--u)); }
+/* HPM annotation, same language as the cover's leaders: label above the plate, a red line draws down, the small target pops and blinks */
+.pr-fig1 { --lx: 31%; --ty: 15%; }
+.pr-ann { position: absolute; z-index: 2; left: 0; bottom: calc(100% + 4px); width: 70%; }
+.pr-ann b { display: block; font-weight: 800; font-size: calc(7 * var(--uf)); line-height: 1.25; color: var(--ink); }
+.pr-ann b i { font-style: normal; color: var(--red); }
+.pr-ann span { display: block; margin-top: 3px; font-size: calc(5 * var(--uf)); line-height: 1.3; color: var(--steel); text-transform: uppercase; letter-spacing: .04em; }
+.pr-draw { position: absolute; z-index: 2; left: var(--lx); top: 0; height: calc(var(--ty) - 1.5%); width: max(1px, calc(1 * var(--u))); background: var(--red); transform: scaleY(0); transform-origin: top; }
+.in > .pr-draw { transition: transform .5s linear .3s; transform: none; }
+.pr-tgt { position: absolute; z-index: 2; left: var(--lx); top: var(--ty); width: calc(12 * var(--u)); height: calc(12 * var(--u)); min-width: 12px; min-height: 12px; transform: translate(-50%, -50%); overflow: visible; }
+@media (prefers-reduced-motion: reduce) { .pr-draw { transform: none; } }
+.pr-num.pr-num1 { left: auto; right: -.04em; bottom: auto; top: 6%; }   /* 01 sits in the gap between the radar and the camera trailer */
+.pr-fill { margin-top: 18px; padding-left: 12px; border-left: 2px solid var(--red); }
+.pr-fill p + p { margin-top: 4px; }
+/* 02 / 03: device on a huge quiet number, like the alternatives' names */
+.pr-fig2, .pr-fig3 { height: min(330px, 84vw); }
+.pr-num { position: absolute; left: -.04em; bottom: 0; z-index: 0; font: 900 calc((100vw - 44px) / 2.6) / .8 var(--f-display); letter-spacing: -.04em; color: rgba(13, 27, 42, .075); }
+.pr-vid { position: absolute; right: 0; bottom: 0; height: 100%; aspect-ratio: 588 / 896; z-index: 1; }   /* phones: unmirrored, on the right */
+.pr-jam { position: absolute; right: 14%; bottom: 0; height: 78%; width: auto; z-index: 1; }
+/* the gap chart */
+.pr-gap { margin-top: 64px; }
+.gap-chart { position: relative; display: grid; gap: 16px; margin-top: 46px; --lab: 0px; }
+.gap-row { position: relative; }   /* no stacking context: bars go under the hatched gap, texts over it */
+.gap-track { z-index: 1; }
+.gap-name, .gap-note { position: relative; z-index: 3; }
+.gap-name { font-weight: 800; font-size: calc(8 * var(--uf)); }
+.gap-name b { font: 500 .85em var(--f-mono); color: var(--red); margin-right: .4em; }
+.gap-name span[lang] { color: var(--steel); font-weight: 600; text-transform: uppercase; font-size: .72em; letter-spacing: .05em; margin-left: .5em; }
+.gap-track { position: relative; height: 18px; margin-top: 5px; background: rgba(13, 27, 42, .06); }
+.gap-bar { position: absolute; top: 0; bottom: 0; left: var(--a); width: calc(var(--b) - var(--a)); background: var(--blue); opacity: .8; }
+.gap-humble .gap-bar { background: #7FA36A; opacity: .95; }   /* fern: light military green (picked from a colour study) */
+.gap-hb { color: #5C8A4B; }   /* same type as the other row names, only the colour differs */
+.gap-chart > .gap-zone { z-index: 2; pointer-events: none; }   /* the hatched gap lies over every bar, as on the jammer row */
+.gap-part { opacity: 1; background: repeating-linear-gradient(90deg, rgba(42, 70, 116, .8) 0 5px, transparent 5px 9px); }
+.gap-note { margin-top: 4px; font-size: calc(6 * var(--uf)); color: var(--steel); text-transform: uppercase; letter-spacing: .04em; }
+.gap-zone {
+  position: absolute; z-index: 0; top: 0; bottom: 26px; left: var(--lab); width: calc((100% - var(--lab)) * .18);
+  background: repeating-linear-gradient(135deg, rgba(224, 38, 47, .2) 0 2px, transparent 2px 7px); border-right: 1.5px dashed var(--red);
+}
+.gap-zone > span { position: absolute; bottom: 100%; left: 0; display: block; white-space: nowrap; font: 700 calc(7 * var(--uf)) / 1.2 var(--f-mono); color: var(--red); text-transform: uppercase; letter-spacing: .08em; padding-bottom: 4px; }
+.gap-zone > span[lang] { bottom: calc(100% + 1.3em); opacity: .7; font-weight: 500; font-size: calc(5.5 * var(--uf)); }
+.gap-zone .gap-nopair { left: calc(100% + 8px); bottom: 100%; opacity: 1; font: 700 calc(6 * var(--uf)) / 1.3 var(--f-mono); color: var(--red); white-space: nowrap; }
+.gap-zone .gap-nopair > span { display: block; }
+.gap-zone .gap-nopair small { display: block; font-size: .85em; font-weight: 500; color: var(--steel); }
+.gap-cost { position: absolute; left: 6px; top: 50%; transform: translateY(-50%); font: 800 calc(7 * var(--uf)) / 1 var(--f-text); color: #fff; letter-spacing: .08em; }
+.gap-axis { display: flex; justify-content: space-between; margin-left: var(--lab); padding-top: 6px; border-top: 1px solid rgba(85, 97, 110, .5); font: 500 calc(5.6 * var(--uf)) / 1.3 var(--f-mono); color: var(--steel); text-transform: uppercase; letter-spacing: .04em; }
+.gap-axis > span + span::after { content: ' →'; }
+.gap-axis > span:first-child::before { content: '← '; }
+.gap-cap { margin-top: 16px; }
+.gap-cap b { display: block; font-weight: 800; font-size: calc(9 * var(--uf)); line-height: 1.3; }
+.gap-cap span { display: block; margin-top: 3px; font-size: calc(6 * var(--uf)); color: var(--steel); text-transform: uppercase; letter-spacing: .05em; }
+/* 03: shotgun behind the jammer — what troops really carry today */
+.pr-gun { position: absolute; z-index: 1; top: 0; left: 0; width: 72%; height: auto; }
+.pr-fig3 .pr-jam { z-index: 2; right: 2%; bottom: 14%; height: 80%; }
+.pr-luck { margin-top: calc(14 * var(--u)); padding-top: calc(10 * var(--u)); border-top: 1px solid rgba(85, 97, 110, .35); }
+.pr-luck p + p { margin-top: calc(3 * var(--u)); }
+@media (orientation: landscape) and (max-width: 1099px) { #problem .panel { display: block; min-height: 0; padding: 40px 32px; } }
+
+@media (min-width: 1100px) and (orientation: landscape) {
+  #problem { min-height: 0; padding: 2vh 0; }
+  #problem .stage { aspect-ratio: auto; width: min(80vw, calc(73.6vh * 841.9 / 395)); width: min(80vw, calc(73.6svh * 841.9 / 395)); }   /* a long block: scale with the width, scroll through it */
+  #problem .panel { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: calc(14 * var(--u)); padding: calc(24 * var(--u)) calc(14.2 * var(--u)) calc(34 * var(--u)); }
+  .p-pr > * { max-width: none; margin: 0; }
+  .pr-head { grid-column: 1 / 5; }
+  .pr-lead { grid-column: 5 / 13; }
+  .pr-txt { margin: 0; }
+  .pr-a1 { grid-column: 1 / 13; display: grid; grid-template-columns: 7fr 5fr; column-gap: calc(14 * var(--u)); align-items: center; margin-top: calc(26 * var(--u)); }
+  .pr-fig1 { width: calc(330 * var(--u)); max-width: none; margin: 0 0 0 calc(100 * var(--u)); }
+  .pr-ground { display: block; position: absolute; z-index: 0; left: 50%; width: 100vw; transform: translateX(-50%); top: calc(150 * var(--u)); height: calc(110 * var(--u)); pointer-events: none; }
+  .pr-duo { grid-column: 1 / 13; display: grid; grid-template-columns: 1fr 1fr; column-gap: calc(28 * var(--u)); margin-top: calc(16 * var(--u)); }
+  .pr-duo > .pr-a2 { margin-top: calc(-40 * var(--u)); }
+  .pr-a2, .pr-a3 { margin: 0; display: grid; grid-template-columns: calc(150 * var(--u)) 1fr; column-gap: calc(16 * var(--u)); align-items: end; }
+  .pr-fig2, .pr-fig3 { height: calc(230 * var(--u)); }
+  .pr-num { font-size: calc(84 * var(--u)); }
+  .pr-vid { right: auto; left: 54%; transform: translateX(-50%) scaleX(-1); }   /* desktop: mirrored */
+  .pr-jam { right: auto; left: 56%; transform: translateX(-50%); height: 72%; }
+  .pr-gap { grid-column: 1 / 13; display: grid; grid-template-columns: calc(262 * var(--u)) 1fr; column-gap: calc(28 * var(--u)); margin-top: calc(48 * var(--u)); grid-template-rows: auto auto 1fr; }
+  .pr-gap > .t-lead { grid-column: 1; grid-row: 1; }
+  .pr-gap > .t-en { grid-column: 1; grid-row: 2; align-self: start; }
+  .gap-chart { grid-column: 2; grid-row: 1 / 4; margin-top: calc(20 * var(--u)); gap: calc(12 * var(--u)); --lab: calc(130 * var(--u)); }
+  .gap-row { display: grid; grid-template-columns: calc(120 * var(--u)) 1fr; column-gap: calc(10 * var(--u)); align-items: center; }
+  .gap-name { grid-row: 1 / 3; }
+  .gap-name span[lang] { display: block; margin: calc(2 * var(--u)) 0 0 1.55em; }
+  .gap-track { height: calc(14 * var(--u)); margin: 0; }
+  .gap-note { grid-column: 2; margin-top: calc(3 * var(--u)); padding-left: var(--a); }
+  .gap-zone { bottom: calc(18 * var(--u)); }
+  .gap-zone > span[lang] { display: block; }
+  .gap-axis { padding-top: calc(5 * var(--u)); }
+  .gap-cap { grid-column: 2; grid-row: 4; margin-top: calc(10 * var(--u)); padding-left: calc(130 * var(--u)); }
+  .pr-a3 { grid-template-columns: calc(180 * var(--u)) 1fr; }
+  .pr-fig3 .pr-gun { left: -6%; width: 90%; }
+  .pr-fig3 .pr-jam { left: auto; right: 0; bottom: 28%; transform: none; height: 60%; }
+  .pr-ann { left: calc(-100 * var(--u)); width: calc(235 * var(--u)); }   /* aligned with the PROBLEM title column */
+  .pr-a1 > .pr-txt { align-self: start; margin-top: calc(66 * var(--u)); }
+  .pr-num.pr-num1 { font-size: calc(84 * var(--u)); left: calc(-112 * var(--u)); right: auto; top: 34%; }
+  .pr-gap > .pr-fill { grid-column: 1; grid-row: 3; align-self: start; margin-top: calc(14 * var(--u)); padding-left: calc(9 * var(--u)); }
+  .pr-ann b { font-size: calc(7 * var(--u)); }
+  .pr-ann span { font-size: calc(5 * var(--u)); }
+  .pr-a1 { margin-top: calc(-26 * var(--u)) !important; }
+  .gap-cost { left: calc(5 * var(--u)); font-size: calc(7.5 * var(--u)); }
+}
+
+/* language versions: headings that grow in English wrap inside their column instead of running across the spread */
+html:not(.l-pl) .who-l { white-space: normal; }
+.gap-zone .gap-nopair > span:first-child::before { content: '← '; }
+.vis-note .vn-a { white-space: pre; }
+@media (max-width: 1099px), (orientation: portrait) { .vis-note .vn-a { display: none; } }
