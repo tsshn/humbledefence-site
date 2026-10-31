@@ -563,7 +563,11 @@ html.handoff .drift { visibility: hidden; }
   .gap-chart { grid-column: 2; grid-row: 1 / 4; margin-top: calc(20 * var(--u)); gap: calc(12 * var(--u)); --lab: calc(130 * var(--u)); }
   .gap-row { display: grid; grid-template-columns: calc(120 * var(--u)) 1fr; column-gap: calc(10 * var(--u)); align-items: center; }
   .gap-name { grid-row: 1 / 3; }
-  .gap-name span[lang] { display: block; margin: calc(2 * var(--u)) 0 0 1.55em; }
+  .gap-name { display: grid; grid-template-columns: auto 1fr; column-gap: .45em; align-content: center; }   /* number in its own column: both lines start at the same x */
+  .gap-name b { margin: 0; grid-row: 1; align-self: baseline; }
+  .gap-name > span:not([lang]) { grid-row: 1; align-self: baseline; }
+  .gap-name > span { grid-column: 2; }
+  .gap-name span[lang] { display: block; margin: calc(2 * var(--u)) 0 0; }
   .gap-track { height: calc(14 * var(--u)); margin: 0; }
   .gap-note { grid-column: 2; margin-top: calc(3 * var(--u)); padding-left: var(--a); }
   .gap-zone { bottom: calc(18 * var(--u)); }
@@ -588,3 +592,5 @@ html:not(.l-pl) .who-l { white-space: normal; }
 .gap-zone .gap-nopair > span:first-child::before { content: '← '; }
 .vis-note .vn-a { white-space: pre; }
 @media (max-width: 1099px), (orientation: portrait) { .vis-note .vn-a { display: none; } }
+/* desktop vision: the two statements share a top line; the right one is set flush right to the page margin */
+@media (min-width: 1100px) and (orientation: landscape) { .vis-scene > .vis-layer { text-align: right; } }
