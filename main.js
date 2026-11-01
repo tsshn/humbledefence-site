@@ -279,24 +279,25 @@
   onScroll();
   fabs.querySelector('.jump').addEventListener('click', e => e.currentTarget.blur());   // no lingering focus after the jump
 
-  // 7) demo: three clips behind three buttons — nothing autoplays; picking a clip starts it
+  // 7) demo: three clips behind three buttons — nothing autoplays on page load.
+  //    The two silent clips start as soon as their button is picked; the presentation has sound,
+  //    so it only loads behind its poster and waits for the visitor to press play.
   const CLIPS = {
     live: { src: 'assets/demo/live-detection', poster: 'assets/demo/live-detection.webp?v=2' },
     shake: { src: 'assets/demo/shake-it', poster: 'assets/demo/shake-it.webp?v=2' },
-    pres: null,                                            // presentation: coming soon
+    pres: { src: 'assets/demo/presentation', poster: 'assets/demo/presentation.webp?v=1', v: 1, sound: true },
   };
   const video = demo.querySelector('video');
-  const stub = demo.querySelector('.player-stub');
   const res = () => (matchMedia('(max-width: 900px)').matches ? '720' : '1080');
   const load = key => {
     const c = CLIPS[key];
     video.pause();
-    stub.hidden = !!c;
-    video.hidden = !c;
-    if (!c) { video.removeAttribute('src'); video.load(); return false; }
     video.poster = c.poster;
-    video.src = `${c.src}-${res()}.mp4?v=2`;
-    return true;
+    video.dataset.clip = key;                              // read by track.js (seconds watched per clip)
+    video.muted = !c.sound;
+    video.preload = c.sound ? 'metadata' : 'none';         // silent clips download on play; the presentation fetches just its length
+    video.src = `${c.src}-${res()}.mp4?v=${c.v || 2}`;
+    return !c.sound;                                       // true = start playing now
   };
   load('live');                                            // first clip ready behind its poster, not playing
   demo.querySelectorAll('.demo-tab').forEach(b => b.addEventListener('click', () => {

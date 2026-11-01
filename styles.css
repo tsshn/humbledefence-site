@@ -15,7 +15,7 @@
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
-body { overflow-x: clip; margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-text); font-weight: 600; -webkit-font-smoothing: antialiased; }
+body { overflow-x: hidden; overflow-x: clip; margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-text); font-weight: 600; -webkit-font-smoothing: antialiased; }
 h1, h2, h3, p, ul { margin: 0; padding: 0; font-size: inherit; }
 ul { list-style: none; }
 em { font-style: normal; color: var(--red); }
@@ -276,10 +276,13 @@ html.loading .lang { visibility: hidden; }
 .demo-tab { appearance: none; cursor: pointer; padding: 9px 14px; white-space: nowrap; text-align: center; border: 1.5px solid rgba(13, 27, 42, .2); border-radius: 999px; background: transparent; font: 800 13px var(--f-text); color: var(--ink); transition: background .2s, color .2s, border-color .2s; }
 .demo-tab:hover { border-color: var(--ink); }
 .demo-tab.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+/* phones: the Polish labels don't fit three equal pills — size each to its text and let long ones wrap */
+@media (max-width: 600px) {
+  .demo-tabs { width: 100%; grid-auto-columns: auto; gap: 6px; }
+  .demo-tab { white-space: normal; padding: 8px 10px; font-size: 12px; line-height: 1.2; border-radius: 22px; }
+}
 .player { position: relative; }
 .player video[hidden] { display: none; }
-.player-stub { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(135deg, #16263a, #0D1B2A); color: rgba(255, 255, 255, .75); font: 500 13px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; }
-.player-stub[hidden] { display: none; }
 
 /* ---------- loader: target spins, dashes ±20 px, blinks, spins again ---------- */
 html.loading, html.loading body { overflow: hidden; }

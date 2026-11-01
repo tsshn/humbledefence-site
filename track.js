@@ -17,7 +17,7 @@
     v: (crypto.randomUUID ? crypto.randomUUID().replace(/-/g, '') : Math.random().toString(36).slice(2) + Date.now().toString(36)).slice(0, 16),
     r: (q.get('r') || q.get('utm_source') || '').slice(0, 40),
     ref,
-    act: 0, sc: 0, vw: 0, mail: false,
+    act: 0, sc: 0, vw: 0, vv: { live: 0, shake: 0, pres: 0 }, mail: false,
     lg: window.HD_LANG || 'pl',             // site version: pl / en-f / en
   };
   addEventListener('hd:lang', e => { st.lg = e.detail; send('update'); });
@@ -33,7 +33,7 @@
   };
   addEventListener('scroll', onScroll, { passive: true });
 
-  // demo video: seconds actually watched (seeking does not count)
+  // demo video: seconds actually watched, per clip (seeking does not count); vw = all clips together
   const video = document.querySelector('#demo video');
   if (video) {
     let lastT = null;
@@ -41,7 +41,7 @@
     video.addEventListener('timeupdate', () => {
       if (lastT !== null && !video.paused) {
         const dt = video.currentTime - lastT;
-        if (dt > 0 && dt < 1.5) st.vw += dt;
+        if (dt > 0 && dt < 1.5) { st.vw += dt; const k = video.dataset.clip; if (k in st.vv) st.vv[k] += dt; }
       }
       lastT = video.currentTime;
     });
@@ -56,8 +56,9 @@
   }, true);
 
   // sending: every 3 s if something changed, every 10 s regardless, and a final report when hidden/closed
-  const snapshot = () => ({ ...st, open: Math.round((Date.now() - t0) / 1000), act: activeNow(), vw: Math.round(st.vw) });
-  const sig = s => `${s.sc}|${s.vw}|${s.mail}|${s.lg}`;            // a "change" = scroll, video or email; time rides the 10 s beat
+  const snapshot = () => ({ ...st, open: Math.round((Date.now() - t0) / 1000), act: activeNow(), vw: Math.round(st.vw),
+    vv: Object.fromEntries(Object.entries(st.vv).map(([k, x]) => [k, Math.round(x)])) });
+  const sig = s => `${s.sc}|${s.vw}|${JSON.stringify(s.vv)}|${s.mail}|${s.lg}`;            // a "change" = scroll, video or email; time rides the 10 s beat
   let lastSig = '', lastSend = 0;
   const send = (ev, beacon) => {
     const s = snapshot();
